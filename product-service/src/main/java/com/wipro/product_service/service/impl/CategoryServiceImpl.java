@@ -1,26 +1,52 @@
 package com.wipro.product_service.service.impl;
 
 import com.wipro.product_service.dto.CategoryDTO;
+import com.wipro.product_service.exception.PermissionDeniedException;
+import com.wipro.product_service.exception.ResourceServiceException;
 import com.wipro.product_service.exception.ResourceNotFoundException;
 import com.wipro.product_service.model.Category;
 import com.wipro.product_service.repository.CategoryRepository;
 import com.wipro.product_service.service.CategoryService;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
 public class CategoryServiceImpl implements CategoryService {
 
     @Autowired
-    private CategoryRepository categoryRepository;
+    CategoryRepository categoryRepository;
+
+    @Autowired
+    PermissionService permissionService;
 
     @Override
-    public CategoryDTO createCategory(Category category) {
-        Category savedCategory = this.categoryRepository.save(category);
-        return new CategoryDTO(category);
+    public CategoryDTO createCategory(Category category, HttpServletRequest request) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String userId = authentication.getName();
+
+        if (!permissionService.hasPermission(request, "CREATE_CATEGORY")) {
+            throw new PermissionDeniedException();
+        }
+
+        category.setId(UUID.randomUUID().toString());
+        category.setCreatedAt(LocalDateTime.now());
+        category.setUpdatedAt(LocalDateTime.now());
+        category.setCreatedBy(userId);
+
+        try {
+            Category savedCategory = this.categoryRepository.save(category);
+            return new CategoryDTO(savedCategory);
+        } catch (Exception e) {
+            throw new ResourceServiceException("Failed to create category.");
+        }
     }
 
     @Override
