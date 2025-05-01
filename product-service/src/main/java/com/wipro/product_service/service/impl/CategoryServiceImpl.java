@@ -1,0 +1,58 @@
+package com.wipro.product_service.service.impl;
+
+import com.wipro.product_service.dto.CategoryDTO;
+import com.wipro.product_service.exception.ResourceNotFoundException;
+import com.wipro.product_service.model.Category;
+import com.wipro.product_service.repository.CategoryRepository;
+import com.wipro.product_service.service.CategoryService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.stream.Collectors;
+
+@Service
+public class CategoryServiceImpl implements CategoryService {
+
+    @Autowired
+    private CategoryRepository categoryRepository;
+
+    @Override
+    public CategoryDTO createCategory(Category category) {
+        Category savedCategory = this.categoryRepository.save(category);
+        return new CategoryDTO(category);
+    }
+
+    @Override
+    public CategoryDTO getCategoryById(String id) throws ResourceNotFoundException {
+        Category category = this.categoryRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Category not found with id :" + id));
+        return new CategoryDTO(category);
+    }
+
+    @Override
+    public List<CategoryDTO> getAllCategories() {
+        List<Category> categories = this.categoryRepository.findAll();
+        return categories.stream().map(CategoryDTO::new).collect(Collectors.toList());
+    }
+
+
+//    @Override
+//    public void deleteCategory(long categoryId) {
+//        Category category = this.categoryRepository.findById(categoryId).orElseThrow(() -> new ResourceNotFoundException("Category" , "id" , categoryId));
+//
+//        this.categoryRepository.delete(category);
+//    }
+//
+//    @Override
+//    public CategoryDto updateCategory(CategoryDto categoryDto, long categoryId) {
+//
+//        Category category = this.categoryRepository.findById(categoryId).orElseThrow(() -> new ResourceNotFoundException("Category" , "id" , categoryId));
+//
+//        category.setImageUrl(categoryDto.getImageUrl());
+//
+//        Category updatedCategory = this.categoryRepository.save(category);
+//
+//        return this.categoryToDto(updatedCategory);
+//    }
+
+}
