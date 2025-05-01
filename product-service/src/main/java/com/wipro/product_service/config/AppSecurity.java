@@ -9,13 +9,11 @@ import org.springframework.security.config.annotation.web.configurers.AbstractHt
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
-
 @Configuration
 @EnableWebSecurity
 @EnableMethodSecurity(prePostEnabled = true) 
 public class AppSecurity {
-	
-	 
+
 	    @Bean
 	    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception{
 
@@ -26,6 +24,4 @@ public class AppSecurity {
 	        );
 	    return http.build();
 	    }
-
-	
 }

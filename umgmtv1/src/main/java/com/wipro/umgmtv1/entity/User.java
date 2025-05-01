@@ -1,100 +1,99 @@
 package com.wipro.umgmtv1.entity;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
+
+import java.util.UUID;
+
 @Entity
-@Table(name="user")
+@Table(name = "user")
 public class User {
-	
-	@Id
-	@GeneratedValue(strategy=GenerationType.IDENTITY)
-	int id;
-	
-	@Column(name="user_fname")
-	String fName;
-	
-	@Column(name="user_lname")
-	String lName;
-	
-	@Column(name="user_id")
-	String userId;
-	
-	@Column(name="password")
-	String password;
-	
-	@Column(name="salt")
-	String salt;
-	
-	@Column(name="role_id")
-	int roleId;
 
-	public int getId() {
-		return id;
-	}
+    @Id
+    @Column(updatable = false, nullable = false, unique = true)
+    String id;
 
-	public void setId(int id) {
-		this.id = id;
-	}
+    @Column(name = "firstname")
+    String firstname;
 
-	public String getfName() {
-		return fName;
-	}
+    @Column(name = "lastname")
+    String lastname;
 
-	public void setfName(String fName) {
-		this.fName = fName;
-	}
+    @Column(name = "username", nullable = false, unique = true)
+    String username;
 
-	public String getlName() {
-		return lName;
-	}
+    @Column(name = "email", updatable = false, nullable = false, unique = true)
+    String email;
 
-	public void setlName(String lName) {
-		this.lName = lName;
-	}
+    @Column(name = "password")
+    String password;
 
-	public String getUserId() {
-		return userId;
-	}
+    @Column(name = "salt")
+    String salt;
 
-	public void setUserId(String userId) {
-		this.userId = userId;
-	}
+    @Column(name = "role_id")
+    int roleId;
 
-	public String getPassword() {
-		return password;
-	}
+    public String getEmail() {
+        return email;
+    }
 
-	public void setPassword(String password) {
-		this.password = password;
-	}
+    public void setEmail(String email) {
+        this.email = email;
+    }
 
-	public String getSalt() {
-		return salt;
-	}
+    public String getId() {
+        return id;
+    }
 
-	public void setSalt(String salt) {
-		this.salt = salt;
-	}
+    public void setId(String id) {
+        this.id = id;
+    }
 
-	public int getRoleId() {
-		return roleId;
-	}
+    public String getFirstname() {
+        return firstname;
+    }
 
-	public void setRoleId(int roleId) {
-		this.roleId = roleId;
-	}
+    public void setFirstname(String firstname) {
+        this.firstname = firstname;
+    }
 
-	@Override
-	public String toString() {
-		return "User [id=" + id + ", fName=" + fName + ", lName=" + lName + ", userId=" + userId + ", password="
-				+ password + ", salt=" + salt + ", roleId=" + roleId + "]";
-	}
-	
+    public String getLastname() {
+        return lastname;
+    }
 
+    public void setLastname(String lastname) {
+        this.lastname = lastname;
+    }
 
+    public String getUsername() {
+        return username;
+    }
 
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public String getSalt() {
+        return salt;
+    }
+
+    public void setSalt(String salt) {
+        this.salt = salt;
+    }
+
+    public int getRoleId() {
+        return roleId;
+    }
+
+    public void setRoleId(int roleId) {
+        this.roleId = roleId;
+    }
 }
