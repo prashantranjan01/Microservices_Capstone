@@ -1,49 +1,52 @@
 package com.wipro.umgmtv1.controller;
 
+import com.wipro.umgmtv1.dto.APIResponse;
+import com.wipro.umgmtv1.dto.UserData;
 import com.wipro.umgmtv1.exception.UserNotFoundException;
-import com.wipro.umgmtv1.repo.UserRepo;
+import com.wipro.umgmtv1.service.AuthService;
+import com.wipro.umgmtv1.service.RoleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
-
-import com.wipro.umgmtv1.dto.UserData;
-import com.wipro.umgmtv1.entity.User;
-import com.wipro.umgmtv1.service.UserService;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/user")
+@RequestMapping("/api/user")
 public class UserController {
 
-	@Autowired
-	UserService userService;
+    @Autowired
+    AuthService userService;
 
-	@Autowired
-	UserRepo userRepo;
-	
-	
-	@PostMapping("/register")
-	void Register(@RequestBody User user)
-	{
-		userService.register(user);
-	}
-	
-	@PostMapping("/login")
-	UserData login(@RequestParam String userName,@RequestParam String password)
-	{
-		return userService.login(userName,password);
+    @Autowired
+    RoleService roleService;
 
-	}
+    @GetMapping
+    public ResponseEntity<APIResponse<?>> getUserByUsername(@RequestParam String username) {
+        try {
+            UserData user = userService.findByUsername(username);
+            APIResponse<UserData> userAPIResponse = new APIResponse<>(HttpStatus.OK, user);
+            return ResponseEntity.ok(userAPIResponse);
+        } catch (UserNotFoundException e) {
+            APIResponse<?> userNotAPIResponse = new APIResponse<>(HttpStatus.NOT_FOUND, null, "User not found.");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(userNotAPIResponse);
+        }
+    }
+
+    //update user - fname , lname
+
+    //change password - new password
+
+    //change role - roleId
+
+    //deleteUser - id
 
 
-	@GetMapping
-	public ResponseEntity<?> getUserByUsername(@RequestParam String username) {
-		try {
-			User user = userService.findByUsername(username);
-			return ResponseEntity.ok(user);
-		} catch (UserNotFoundException e) {
-			return ResponseEntity.status(HttpStatus.NOT_FOUND)
-					.body(e.getMessage());
-		}
-	}
+
+    @GetMapping("/check")
+    public boolean hasPermission(@RequestParam String action) {
+        return roleService.hasPermission(action);
+    }
 }

@@ -1,30 +1,24 @@
 package com.wipro.umgmtv1.controller;
 
-import java.util.List;
-
+import com.wipro.umgmtv1.service.RoleService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.wipro.umgmtv1.entity.RoleMenu;
-import com.wipro.umgmtv1.service.RoleMenuService;
 
 @RestController
-@RequestMapping("/rolemenu")
+@RequestMapping("/api/role")
 public class RoleController {
 
-	@Autowired
-	RoleMenuService roleMenuService;
-
-	@GetMapping("/{id}")
-	List<RoleMenu> findByUserId(@PathVariable int id)
-	{
-
-		return roleMenuService.findByRoleId(id);
-
-	}
+    @Autowired
+    RoleService roleService;
 
 
+    //create role
+
+    //update role
+
+    //delete role
+
+    //change flag
 }

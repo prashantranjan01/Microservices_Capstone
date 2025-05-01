@@ -1,17 +1,12 @@
 package com.wipro.umgmtv1.repo;
 
-import java.util.List;
-
+import com.wipro.umgmtv1.entity.Role;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import com.wipro.umgmtv1.entity.RoleMenu;
+import java.util.List;
 
 @Repository
-public interface RoleRepo extends JpaRepository<RoleMenu, Integer> {
-
-	List<RoleMenu> findByRoleId(int roleId);
-	boolean existsByRoleIdAndMenuNameAndShowMenu(int roleId, String menuName, String showMenu);
-
-
+public interface RoleRepo extends JpaRepository<Role, String> {
+    List<Role> findByRoleIdAndAction(int roleId, String action);
 }
