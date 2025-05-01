@@ -30,12 +30,12 @@ public class AuthController {
     ResponseEntity<APIResponse<?>> login(
             @RequestParam String username,
             @RequestParam String password) {
-        try{
+        try {
             AuthData authData = userService.login(username, password);
             APIResponse<AuthData> apiResponse = new APIResponse<>(HttpStatus.OK, "User logged in successfully.", authData);
             return ResponseEntity.ok(apiResponse);
-        }catch (Exception e ){
-            APIResponse<?> apiResponse = new APIResponse<>(HttpStatus.UNAUTHORIZED , e.getMessage() , null);
+        } catch (Exception e) {
+            APIResponse<?> apiResponse = new APIResponse<>(HttpStatus.UNAUTHORIZED, e.getMessage(), null);
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(apiResponse);
         }
     }

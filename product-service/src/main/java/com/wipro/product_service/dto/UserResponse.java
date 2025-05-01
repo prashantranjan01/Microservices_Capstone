@@ -2,7 +2,6 @@ package com.wipro.product_service.dto;
 
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import jakarta.persistence.Column;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class UserResponse {
@@ -14,6 +13,9 @@ public class UserResponse {
     int roleId;
     String password;
     String salt;
+
+    public UserResponse() {
+    }
 
     public String getSalt() {
         return salt;
@@ -30,8 +32,6 @@ public class UserResponse {
     public void setPassword(String password) {
         this.password = password;
     }
-
-    public UserResponse() {}
 
     public int getRoleId() {
         return roleId;
