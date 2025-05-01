@@ -30,7 +30,7 @@ public class UserController {
             APIResponse<UserData> userAPIResponse = new APIResponse<>(HttpStatus.OK, user);
             return ResponseEntity.ok(userAPIResponse);
         } catch (UserNotFoundException e) {
-            APIResponse<?> userNotAPIResponse = new APIResponse<>(HttpStatus.NOT_FOUND, null, "User not found.");
+            APIResponse<?> userNotAPIResponse = new APIResponse<>(HttpStatus.NOT_FOUND, "User not found.", null);
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(userNotAPIResponse);
         }
     }

@@ -33,7 +33,7 @@ public class ProductController {
             APIResponse<Product> apiResponse = new APIResponse<>(HttpStatus.OK , product);
             return ResponseEntity.ok(apiResponse);
         }catch (Exception e) {
-            APIResponse<?> apiResponse = new APIResponse<>(HttpStatus.NOT_FOUND, null, e.getMessage());
+            APIResponse<?> apiResponse = new APIResponse<>(HttpStatus.NOT_FOUND, e.getMessage(), null);
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(apiResponse);
         }
     }
