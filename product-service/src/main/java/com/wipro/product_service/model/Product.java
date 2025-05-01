@@ -1,21 +1,18 @@
 package com.wipro.product_service.model;
 
-
 import jakarta.persistence.*;
-import lombok.Data;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
-import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
-@Data
 @Entity
-@Table(name = "products")
+@Table(name = "product")
 public class Product {
+
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    @Column(updatable = false, nullable = false, unique = true)
+    private String id;
 
     @Column(nullable = false)
     private String name;
@@ -23,22 +20,20 @@ public class Product {
     private String description;
 
     @Column(nullable = false)
-    private BigDecimal price;
+    private double price;
 
     @Column(name = "stock_quantity")
-    private Integer stockQuantity;
+    private int stockQuantity;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private ProductStatus status;
+    private ProductStatus status = ProductStatus.ACTIVE;
 
     @Column(name = "image_url")
     private String imageUrl;
 
-    private String category;
-
     @Column(name = "created_by")
-    private Long createdBy;
+    private String createdBy;
 
     @CreationTimestamp
     @Column(name = "created_at", updatable = false)
@@ -47,6 +42,84 @@ public class Product {
     @UpdateTimestamp
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public double getPrice() {
+        return price;
+    }
+
+    public void setPrice(double price) {
+        this.price = price;
+    }
+
+    public int getStockQuantity() {
+        return stockQuantity;
+    }
+
+    public void setStockQuantity(int stockQuantity) {
+        this.stockQuantity = stockQuantity;
+    }
+
+    public ProductStatus getStatus() {
+        return status;
+    }
+
+    public void setStatus(ProductStatus status) {
+        this.status = status;
+    }
+
+    public String getImageUrl() {
+        return imageUrl;
+    }
+
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
+    }
+
+    public String getCreatedBy() {
+        return createdBy;
+    }
+
+    public void setCreatedBy(String createdBy) {
+        this.createdBy = createdBy;
+    }
+
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(LocalDateTime createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    public LocalDateTime getUpdatedAt() {
+        return updatedAt;
+    }
+
+    public void setUpdatedAt(LocalDateTime updatedAt) {
+        this.updatedAt = updatedAt;
+    }
 }
-
-

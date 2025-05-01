@@ -2,6 +2,7 @@ package com.wipro.product_service.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -11,17 +12,18 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 
 @Configuration
 @EnableWebSecurity
-@EnableMethodSecurity(prePostEnabled = true) 
+@EnableMethodSecurity(prePostEnabled = true)
 public class AppSecurity {
 
-	    @Bean
-	    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception{
+    @Bean
+    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 
-	    	http.csrf(AbstractHttpConfigurer::disable)
-	        .addFilterBefore(new JwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class)
-	        .authorizeHttpRequests(auth -> auth
-	            .anyRequest().authenticated()
-	        );
-	    return http.build();
-	    }
+        http.csrf(AbstractHttpConfigurer::disable)
+                .addFilterBefore(new JwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class)
+                .authorizeHttpRequests(auth -> auth
+                        .requestMatchers(HttpMethod.GET).permitAll()
+                        .anyRequest().authenticated()
+                );
+        return http.build();
+    }
 }

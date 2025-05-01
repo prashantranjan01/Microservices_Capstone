@@ -44,7 +44,6 @@ public class UserController {
     //deleteUser - id
 
 
-
     @GetMapping("/check")
     public boolean hasPermission(@RequestParam String action) {
         return roleService.hasPermission(action);

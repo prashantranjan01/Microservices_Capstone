@@ -4,7 +4,8 @@ package com.wipro.product_service.dto;
 public class StockUpdateRequest {
     private int quantity;
 
-    public StockUpdateRequest() {}
+    public StockUpdateRequest() {
+    }
 
     public StockUpdateRequest(int quantity) {
         this.quantity = quantity;

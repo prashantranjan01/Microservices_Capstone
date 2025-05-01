@@ -1,68 +1,86 @@
 package com.wipro.product_service.controller;
 
-import com.wipro.product_service.dto.ProductRequest;
-import com.wipro.product_service.dto.ProductResponse;
+import com.wipro.product_service.dto.APIResponse;
+import com.wipro.product_service.model.Product;
+import com.wipro.product_service.model.ProductStatus;
 import com.wipro.product_service.service.ProductService;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
-@RequestMapping("/api/product")
+@RequestMapping("/api")
 public class ProductController {
 
     @Autowired
     ProductService productService;
 
-    @GetMapping
-    public ResponseEntity<Page<ProductResponse>> getAllProducts(
-            Pageable pageable,
+    @GetMapping("/products")
+    public ResponseEntity<APIResponse<List<Product>>> getAllProducts() {
+        List<Product> productList = productService.getAllProducts();
+        APIResponse<List<Product>> listAPIResponse = new APIResponse<>(HttpStatus.OK , productList);
+        return ResponseEntity.ok(listAPIResponse);
+    }
+
+    @GetMapping("/product/{id}")
+    public ResponseEntity<APIResponse<?>> getProductById(@PathVariable String id) {
+        try {
+            Product product = productService.getProductById(id);
+            APIResponse<Product> apiResponse = new APIResponse<>(HttpStatus.OK , product);
+            return ResponseEntity.ok(apiResponse);
+        }catch (Exception e) {
+            APIResponse<?> apiResponse = new APIResponse<>(HttpStatus.NOT_FOUND, null, e.getMessage());
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(apiResponse);
+        }
+    }
+
+    @GetMapping("/product")
+    public ResponseEntity<APIResponse<List<Product>>> getProductByStatus(@RequestParam ProductStatus status) {
+        List<Product> productList = productService.getAllProductsByStatus(status);
+        APIResponse<List<Product>> listAPIResponse = new APIResponse<>(HttpStatus.OK , productList);
+        return ResponseEntity.ok(listAPIResponse);
+    }
+
+    @PostMapping("/product")
+    public ResponseEntity<APIResponse<?>> createProduct(
+            @RequestBody Product product,
             HttpServletRequest request) {
-        return ResponseEntity.ok(productService.getAllProducts(pageable, request));
+        try {
+            Product createdProduct = productService.createProduct(product, request);
+            APIResponse<Product> apiResponse = new APIResponse<>(HttpStatus.CREATED, "Product created successfully.", product);
+            return ResponseEntity.status(HttpStatus.CREATED).body(apiResponse);
+        } catch (Exception e) {
+            APIResponse<?> apiResponse = new APIResponse<>(HttpStatus.BAD_REQUEST, e.getMessage(), null);
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(apiResponse);
+        }
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<ProductResponse> getProductById(
-            @PathVariable Long id,
-            HttpServletRequest request) {
-        return ResponseEntity.ok(productService.getProductById(id, request));
-    }
-
-    @PostMapping
-    public ResponseEntity<ProductResponse> createProduct(
-            @RequestBody ProductRequest request,
-            HttpServletRequest servletRequest) {
-        return ResponseEntity
-                .status(HttpStatus.CREATED)
-                .body(productService.createProduct(request, servletRequest));
-    }
-
-    @PutMapping("/{id}")
-    public ResponseEntity<ProductResponse> updateProduct(
-            @PathVariable Long id,
-            @RequestBody ProductRequest request,
-            HttpServletRequest servletRequest) {
-        return ResponseEntity.ok(productService.updateProduct(id, request, servletRequest));
-    }
-
-    @PatchMapping("/{id}/stock")
-    public ResponseEntity<Void> updateStock(
-            @PathVariable Long id,
-            @RequestParam int quantity,
-            HttpServletRequest servletRequest) {
-        productService.updateProductStock(id, quantity, servletRequest);
-        return ResponseEntity.ok().build();
-    }
-
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteProduct(
-            @PathVariable Long id,
-            HttpServletRequest servletRequest) {
-        productService.deleteProduct(id, servletRequest);
-        return ResponseEntity.noContent().build();
-    }
+//    @PutMapping("/{id}")
+//    public ResponseEntity<ProductResponse> updateProduct(
+//            @PathVariable Long id,
+//            @RequestBody ProductRequest request,
+//            HttpServletRequest servletRequest) {
+//        return ResponseEntity.ok(productService.updateProduct(id, request, servletRequest));
+//    }
+//
+//    @PatchMapping("/{id}/stock")
+//    public ResponseEntity<Void> updateStock(
+//            @PathVariable Long id,
+//            @RequestParam int quantity,
+//            HttpServletRequest servletRequest) {
+//        productService.updateProductStock(id, quantity, servletRequest);
+//        return ResponseEntity.ok().build();
+//    }
+//
+//    @DeleteMapping("/{id}")
+//    public ResponseEntity<Void> deleteProduct(
+//            @PathVariable Long id,
+//            HttpServletRequest servletRequest) {
+//        productService.deleteProduct(id, servletRequest);
+//        return ResponseEntity.noContent().build();
+//    }
 }
