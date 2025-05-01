@@ -13,4 +13,10 @@ public interface AuthService {
     AuthData login(String userName, String password) throws InvalidPasswordException, UserNotFoundException;
 
     UserData findByUsername(String username) throws UserNotFoundException;
+
+    UserData updateByUsername(String username,UserData updatedUser) throws UserNotFoundException;
+
+    void changePassword(String username,String currentPassword,String UpdatedPassword) throws UserNotFoundException;
+
+    void deleteByUserName(String username) throws UserNotFoundException;
 }

@@ -13,6 +13,9 @@ public class UserData {
     private String username;
     private int roleId;
 
+    public UserData() {
+    }
+
     public UserData(User user) {
         this.id = user.getId();
         this.firstname = user.getFirstname();

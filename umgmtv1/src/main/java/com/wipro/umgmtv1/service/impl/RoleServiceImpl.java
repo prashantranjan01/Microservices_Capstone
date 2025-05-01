@@ -1,5 +1,6 @@
 package com.wipro.umgmtv1.service.impl;
 
+import com.wipro.umgmtv1.dto.RoleChangeRequest;
 import com.wipro.umgmtv1.entity.Role;
 import com.wipro.umgmtv1.entity.User;
 import com.wipro.umgmtv1.exception.UserNotFoundException;
@@ -34,4 +35,14 @@ public class RoleServiceImpl implements RoleService {
         }
         return false;
     }
+
+//    @Override
+//    public void changeRole(String username, RoleChangeRequest request) throws UserNotFoundException {
+//        User existinguser = userRepo.findByUsername(username);
+//        if (existinguser == null) {
+//            throw new UserNotFoundException("User with username : " + username + " not found.");
+//        }
+//        existinguser.setRoleId(request.roleId);
+//
+//    }
 }

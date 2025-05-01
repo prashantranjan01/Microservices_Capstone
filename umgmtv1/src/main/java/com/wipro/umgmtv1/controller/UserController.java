@@ -1,6 +1,7 @@
 package com.wipro.umgmtv1.controller;
 
 import com.wipro.umgmtv1.dto.APIResponse;
+import com.wipro.umgmtv1.dto.ResetPasswordAPIRequest;
 import com.wipro.umgmtv1.dto.UserData;
 import com.wipro.umgmtv1.exception.UserNotFoundException;
 import com.wipro.umgmtv1.service.AuthService;
@@ -8,10 +9,7 @@ import com.wipro.umgmtv1.service.RoleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/user")
@@ -37,12 +35,43 @@ public class UserController {
 
     //update user - fname , lname
 
-    //change password - new password
+    @PutMapping
+    public ResponseEntity<APIResponse<?>> updateUser(@RequestParam String username,
+            @RequestBody UserData updatedUserData){
+        try{
+            UserData updatedUser = userService.updateByUsername(username, updatedUserData);
+            APIResponse<UserData> response = new APIResponse<>(HttpStatus.OK, updatedUserData);
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            APIResponse<?> userNotAPIResponse = new APIResponse<>(HttpStatus.BAD_REQUEST,e.getMessage(), null);
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(userNotAPIResponse);
+        }
+    }
 
-    //change role - roleId
+    @PutMapping("/change-password")
+    public ResponseEntity<APIResponse<?>> changePassword(@RequestParam String username,
+                                                         @RequestBody ResetPasswordAPIRequest changePasswordRequest){
+        try{
+            userService.changePassword(username,changePasswordRequest.getCurrentPassword(),changePasswordRequest.getNewPassword());
+            APIResponse<String> response=new APIResponse<>(HttpStatus.OK,"Password changed successfully.");
+            return ResponseEntity.ok(response);
+        } catch (Exception e){
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(new APIResponse<>(HttpStatus.BAD_REQUEST,e.getMessage(),null));
+        }
+    }
 
-    //deleteUser - id
-
+    @DeleteMapping
+    public ResponseEntity<APIResponse<?>> deleteUser(@RequestParam String username){
+        try{
+            userService.deleteByUserName(username);
+            APIResponse<String> response=new APIResponse<>(HttpStatus.OK,"User deleted successfully.");
+            return ResponseEntity.ok(response);
+        }catch (Exception e){
+            APIResponse<?> notFound=new APIResponse<>(HttpStatus.BAD_REQUEST,e.getMessage(),null);
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(notFound);
+        }
+    }
 
     @GetMapping("/check")
     public boolean hasPermission(@RequestParam String action) {

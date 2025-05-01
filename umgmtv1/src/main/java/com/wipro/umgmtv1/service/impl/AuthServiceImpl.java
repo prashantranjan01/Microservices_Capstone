@@ -16,6 +16,7 @@ import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
@@ -34,6 +35,8 @@ public class AuthServiceImpl implements AuthService {
         user.setSalt(salt);
         user.setId(UUID.randomUUID().toString());
         user.setPassword(hashedPassword);
+        user.setCreatedAt(LocalDateTime.now());
+        user.setUpdatedAt(LocalDateTime.now());
         User createdUser = userRepo.save(user);
         UserData userData = new UserData(createdUser);
         String token = getJWTToken(userData.getId());
@@ -64,6 +67,56 @@ public class AuthServiceImpl implements AuthService {
         }
         return new UserData(user);
     }
+
+    @Override
+    public UserData updateByUsername(String username, UserData updatedUser) throws UserNotFoundException {
+
+        User existinguser=userRepo.findByUsername(username);
+        if(existinguser==null){
+            throw new UserNotFoundException("User with username: "+username+" not found");
+        }
+        if (updatedUser.getFirstname() != null) {
+            existinguser.setFirstname(updatedUser.getFirstname());
+        }
+        if(updatedUser.getLastname()!=null){
+            existinguser.setLastname(updatedUser.getLastname());
+        }
+        existinguser.setUpdatedAt(LocalDateTime.now());
+        User savedUser= userRepo.save(existinguser);
+        return new UserData(savedUser);
+    }
+
+    @Override
+    public void changePassword(String username, String currentPassword, String UpdatedPassword) throws UserNotFoundException {
+        User user = userRepo.findByUsername(username);
+        if (user == null) {
+            throw new UserNotFoundException("User with username : " + username + " not found.");
+        }
+
+        String storedSalt = user.getSalt();
+        String storedHash = user.getPassword();
+
+        String inputHash = BCrypt.hashpw(currentPassword, storedSalt);
+        if (!inputHash.equals(storedHash)) {
+            throw new InvalidPasswordException();
+        }
+        String newSalt=BCrypt.gensalt();
+        String newHashedPassword=BCrypt.hashpw(UpdatedPassword,newSalt);
+        user.setSalt(newSalt);
+        user.setPassword(newHashedPassword);
+        user.setUpdatedAt(LocalDateTime.now());
+        userRepo.save(user);
+    }
+
+    @Override
+    public void deleteByUserName(String username) throws UserNotFoundException {
+        User existinguser = userRepo.findByUsername(username);
+        if (existinguser == null) {
+            throw new UserNotFoundException("User with username : " + username + " not found.");
+        }
+        userRepo.delete(existinguser);
+    }
+
 
     private String getJWTToken(String id) {
 
