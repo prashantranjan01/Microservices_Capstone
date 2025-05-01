@@ -1,0 +1,296 @@
+{
+	"info": {
+		"_postman_id": "731e29b6-e503-4447-8b3c-1d367d4a3136",
+		"name": "ECOMMARCE",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "15773380",
+		"_collection_link": "https://lively-crater-769456.postman.co/workspace/My-Workspace~5a3034f8-e4f4-4b59-80b8-c8133dc54b07/collection/15773380-731e29b6-e503-4447-8b3c-1d367d4a3136?action=share&source=collection_link&creator=15773380"
+	},
+	"item": [
+		{
+			"name": "Auth",
+			"item": [
+				{
+					"name": "Register",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"username\" : \"rohan\",\r\n    \"email\":\"iamrohan29@gmail.com\",\r\n    \"password\":\"1233456\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8081/api/auth/register",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"api",
+								"auth",
+								"register"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Login",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8081/api/auth/login?username=rohan&password=1233456",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"api",
+								"auth",
+								"login"
+							],
+							"query": [
+								{
+									"key": "username",
+									"value": "rohan"
+								},
+								{
+									"key": "password",
+									"value": "1233456"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get User",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzUxMiJ9.eyJqdGkiOiJhdXRoLXNlcnZpY2UiLCJzdWIiOiI3ZjY5MzIyZC1hZjFjLTQyNGItOTFiNy0zZGI3M2UyYTUyZDAiLCJhdXRob3JpdGllcyI6WyJST0xFX1VTRVIiXSwiaWF0IjoxNzQ2MDk1MjM1LCJleHAiOjE3NDYxMTMyMzV9.f3x_rsGd_0-P3AIp1C-Qacy95P7iWIdzM-hB8jdpoToH8ZzCx7QCfw1z_ZZWO1D7BvFbYG7LGlURKJI2vtloCw",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:8081/api/user?username=rohan",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"api",
+								"user"
+							],
+							"query": [
+								{
+									"key": "username",
+									"value": "rohan"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Check Permission",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzUxMiJ9.eyJqdGkiOiJhdXRoLXNlcnZpY2UiLCJzdWIiOiI3ZjY5MzIyZC1hZjFjLTQyNGItOTFiNy0zZGI3M2UyYTUyZDAiLCJhdXRob3JpdGllcyI6WyJST0xFX1VTRVIiXSwiaWF0IjoxNzQ2MTA2MDA2LCJleHAiOjE3NDYxMjQwMDZ9.Ae-XhFYhPxcYFqm6VC1Ql1g4vG5qO-ZVWOYTzozajjKFxsX8Gbh1iSehEYg6MHLF6xRD1Ky0qALqIG_bIZ6_-w",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:8081/api/user/check?action=CREATE_PRODUCT",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"api",
+								"user",
+								"check"
+							],
+							"query": [
+								{
+									"key": "action",
+									"value": "CREATE_PRODUCT"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Product",
+			"item": [
+				{
+					"name": "Create Product",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzUxMiJ9.eyJqdGkiOiJhdXRoLXNlcnZpY2UiLCJzdWIiOiI3ZjY5MzIyZC1hZjFjLTQyNGItOTFiNy0zZGI3M2UyYTUyZDAiLCJhdXRob3JpdGllcyI6WyJST0xFX1VTRVIiXSwiaWF0IjoxNzQ2MTA2MDA2LCJleHAiOjE3NDYxMjQwMDZ9.Ae-XhFYhPxcYFqm6VC1Ql1g4vG5qO-ZVWOYTzozajjKFxsX8Gbh1iSehEYg6MHLF6xRD1Ky0qALqIG_bIZ6_-w",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\":\"Iphone 13\",\r\n    \"price\":87999,\r\n    \"stockQuantity\":50\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8082/api/product",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8082",
+							"path": [
+								"api",
+								"product"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get All Products",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8082/api/product",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8082",
+							"path": [
+								"api",
+								"product"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Product By Id",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8082/api/product",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8082",
+							"path": [
+								"api",
+								"product"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Product By Status",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8082/api/product",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8082",
+							"path": [
+								"api",
+								"product"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}
