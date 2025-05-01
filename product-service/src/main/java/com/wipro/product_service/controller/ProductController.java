@@ -45,13 +45,15 @@ public class ProductController {
         return ResponseEntity.ok(listAPIResponse);
     }
 
-    @PostMapping("/product")
+    @PostMapping("/category/{categoryId}/sub-category/{subCategoryId}/product")
     public ResponseEntity<APIResponse<?>> createProduct(
             @RequestBody Product product,
+            @PathVariable String categoryId,
+            @PathVariable String subCategoryId,
             HttpServletRequest request) {
         try {
-            Product createdProduct = productService.createProduct(product, request);
-            APIResponse<Product> apiResponse = new APIResponse<>(HttpStatus.CREATED, "Product created successfully.", product);
+            Product createdProduct = productService.createProduct(product,categoryId , subCategoryId, request);
+            APIResponse<Product> apiResponse = new APIResponse<>(HttpStatus.CREATED, "Product created successfully.", createdProduct);
             return ResponseEntity.status(HttpStatus.CREATED).body(apiResponse);
         } catch (Exception e) {
             APIResponse<?> apiResponse = new APIResponse<>(HttpStatus.BAD_REQUEST, e.getMessage(), null);

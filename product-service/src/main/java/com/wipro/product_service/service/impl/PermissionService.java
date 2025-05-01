@@ -18,7 +18,7 @@ public class PermissionService {
         try {
             return authServiceClient.hasPermission(authHeader, action);
         }catch (Exception e){
-            throw new PermissionDeniedException();
+            return false;
         }
     }
 }

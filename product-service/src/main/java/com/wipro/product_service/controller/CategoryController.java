@@ -4,6 +4,7 @@ import com.wipro.product_service.dto.APIResponse;
 import com.wipro.product_service.dto.CategoryDTO;
 import com.wipro.product_service.model.Category;
 import com.wipro.product_service.service.CategoryService;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,16 +19,17 @@ public class CategoryController {
     private CategoryService categoryService;
 
     @PostMapping("/category")
-    public ResponseEntity<APIResponse<?>> createCategory(@RequestBody Category category){
+    public ResponseEntity<APIResponse<?>> createCategory(
+            @RequestBody Category category,
+            HttpServletRequest request){
         try {
-            CategoryDTO categoryDTO = this.categoryService.createCategory(category);
+            CategoryDTO categoryDTO = this.categoryService.createCategory(category,request);
             APIResponse<CategoryDTO> apiResponse = new APIResponse<>(HttpStatus.CREATED, "Category created successfully.", categoryDTO);
             return ResponseEntity.status(HttpStatus.CREATED).body(apiResponse);
         } catch (Exception e) {
             APIResponse<?> apiResponse = new APIResponse<>(HttpStatus.BAD_REQUEST, e.getMessage(), null);
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(apiResponse);
         }
-
     }
 
 //    @PutMapping("/category/{categoryId}")
@@ -45,14 +47,14 @@ public class CategoryController {
 //        return new ResponseEntity<ApiResponse>( new ApiResponse("Category Deleted Successfully" , true) , HttpStatus.OK);
 //    }
 
-    @GetMapping("categories/")
+    @GetMapping("/categories")
     public ResponseEntity<APIResponse<List<CategoryDTO>>> getAllCategories(){
         List<CategoryDTO> categoryDTOList = categoryService.getAllCategories();
         APIResponse<List<CategoryDTO>> apiResponse = new APIResponse<>(HttpStatus.OK , categoryDTOList);
         return ResponseEntity.ok(apiResponse);
     }
 
-    @GetMapping("category/{id}")
+    @GetMapping("/category/{id}")
     public ResponseEntity<APIResponse<?>> getCategory(@PathVariable String id) {
         try {
             CategoryDTO categoryDTO = categoryService.getCategoryById(id);
