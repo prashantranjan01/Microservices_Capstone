@@ -59,7 +59,7 @@ public class APIResponse<T> {
         return statusCode;
     }
 
-    public void setStatusCode(HttpStatus statusCode) {
-        this.statusCode = statusCode.value();
+    public void setStatusCode(int statusCode) {
+        this.statusCode = statusCode;
     }
 }

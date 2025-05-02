@@ -1,6 +1,5 @@
 package com.wipro.product_service.service.impl;
 
-import com.wipro.product_service.dto.SubCategoryDTO;
 import com.wipro.product_service.exception.PermissionDeniedException;
 import com.wipro.product_service.exception.ResourceNotFoundException;
 import com.wipro.product_service.exception.ResourceServiceException;
@@ -33,7 +32,7 @@ public class SubCategoryServiceImpl implements SubCategoryService {
 
     @Transactional
     @Override
-    public SubCategoryDTO createSubCategory(SubCategory subCategory, String categoryId, HttpServletRequest request) throws ResourceNotFoundException, PermissionDeniedException {
+    public SubCategory createSubCategory(SubCategory subCategory, String categoryId, HttpServletRequest request) throws ResourceNotFoundException, PermissionDeniedException {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String userId = authentication.getName();
 
@@ -49,8 +48,7 @@ public class SubCategoryServiceImpl implements SubCategoryService {
         subCategory.setUpdatedAt(LocalDateTime.now());
         subCategory.setCreatedBy(userId);
         try {
-            SubCategory savedSubCategory = this.subCategoryRepository.save(subCategory);
-            return new SubCategoryDTO(savedSubCategory);
+            return this.subCategoryRepository.save(subCategory);
         } catch (Exception e) {
             throw new ResourceServiceException("Failed to create sub category.");
         }

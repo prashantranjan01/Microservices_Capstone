@@ -1,5 +1,6 @@
 package com.wipro.product_service.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
@@ -45,10 +46,12 @@ public class Product {
 
     @ManyToOne
     @JoinColumn(name = "sub_category_id")
+    @JsonIgnore
     private SubCategory subCategory;
 
     @ManyToOne
     @JoinColumn(name = "category_id")
+    @JsonIgnore
     private Category category;
 
     public SubCategory getSubCategory() {

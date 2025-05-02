@@ -1,4 +1,4 @@
-package com.wipro.umgmtv1.dto;
+package com.wipro.cart_service.dto;
 
 import org.springframework.http.HttpStatus;
 
@@ -31,6 +31,9 @@ public class APIResponse<T> {
         this.info = "SUCCESS";
     }
 
+    public APIResponse() {
+    }
+
     public boolean isStatus() {
         return status;
     }
@@ -39,12 +42,12 @@ public class APIResponse<T> {
         this.status = status;
     }
 
-    public T getData() {
-        return data;
+    public int getStatusCode() {
+        return statusCode;
     }
 
-    public void setData(T data) {
-        this.data = data;
+    public void setStatusCode(int statusCode) {
+        this.statusCode = statusCode;
     }
 
     public String getInfo() {
@@ -55,11 +58,11 @@ public class APIResponse<T> {
         this.info = info;
     }
 
-    public int getStatusCode() {
-        return statusCode;
+    public T getData() {
+        return data;
     }
 
-    public void setStatusCode(int statusCode) {
-        this.statusCode = statusCode;
+    public void setData(T data) {
+        this.data = data;
     }
 }

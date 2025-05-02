@@ -1,9 +1,8 @@
 package com.wipro.product_service.service.impl;
 
-import com.wipro.product_service.dto.CategoryDTO;
 import com.wipro.product_service.exception.PermissionDeniedException;
-import com.wipro.product_service.exception.ResourceServiceException;
 import com.wipro.product_service.exception.ResourceNotFoundException;
+import com.wipro.product_service.exception.ResourceServiceException;
 import com.wipro.product_service.model.Category;
 import com.wipro.product_service.repository.CategoryRepository;
 import com.wipro.product_service.service.CategoryService;
@@ -16,7 +15,6 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 @Service
 public class CategoryServiceImpl implements CategoryService {
@@ -28,7 +26,7 @@ public class CategoryServiceImpl implements CategoryService {
     PermissionService permissionService;
 
     @Override
-    public CategoryDTO createCategory(Category category, HttpServletRequest request) {
+    public Category createCategory(Category category, HttpServletRequest request) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String userId = authentication.getName();
 
@@ -42,23 +40,20 @@ public class CategoryServiceImpl implements CategoryService {
         category.setCreatedBy(userId);
 
         try {
-            Category savedCategory = this.categoryRepository.save(category);
-            return new CategoryDTO(savedCategory);
+            return this.categoryRepository.save(category);
         } catch (Exception e) {
             throw new ResourceServiceException("Failed to create category.");
         }
     }
 
     @Override
-    public CategoryDTO getCategoryById(String id) throws ResourceNotFoundException {
-        Category category = this.categoryRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Category not found with id :" + id));
-        return new CategoryDTO(category);
+    public Category getCategoryById(String id) throws ResourceNotFoundException {
+        return this.categoryRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Category not found with id :" + id));
     }
 
     @Override
-    public List<CategoryDTO> getAllCategories() {
-        List<Category> categories = this.categoryRepository.findAll();
-        return categories.stream().map(CategoryDTO::new).collect(Collectors.toList());
+    public List<Category> getAllCategories() {
+        return this.categoryRepository.findAll();
     }
 
 

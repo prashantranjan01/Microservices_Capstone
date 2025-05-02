@@ -1,50 +1,79 @@
 package com.wipro.cart_service.controller;
 
 
-import com.wipro.cart_service.dto.CartDto;
-import com.wipro.cart_service.dto.CartItemDto;
+import com.wipro.cart_service.dto.APIResponse;
+import com.wipro.cart_service.dto.CartDTO;
+import com.wipro.cart_service.entity.CartItem;
 import com.wipro.cart_service.service.CartService;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/api/carts")
+@RequestMapping("/api/cart")
 public class CartController {
 
     @Autowired
     CartService cartService;
 
 
-
-    @GetMapping("/user/current")
-    public ResponseEntity<CartDto> getCurrentUserCart(HttpServletRequest request) {
-        return ResponseEntity.ok(cartService.getCurrentUserCart(request));
+    @GetMapping
+    public ResponseEntity<APIResponse<?>> getCurrentUserCart(HttpServletRequest request) {
+        try {
+            CartDTO cart = cartService.getCurrentUserCart(request);
+            APIResponse<CartDTO> apiResponse = new APIResponse<>(HttpStatus.OK, cart);
+            return ResponseEntity.ok(apiResponse);
+        } catch (Exception e) {
+            APIResponse<?> apiResponse = new APIResponse<>(HttpStatus.NOT_FOUND, e.getMessage(), null);
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(apiResponse);
+        }
     }
 
-    @PostMapping("/user/current/items")
-    public ResponseEntity<CartDto> addItemToCart(
+    @PostMapping("/items")
+    public ResponseEntity<APIResponse<?>> addItemToCart(
             HttpServletRequest request,
-            @RequestBody CartItemDto itemDto) {
-        return ResponseEntity.ok(cartService.addItemToCurrentUserCart(request, itemDto));
+            @RequestBody CartItem cartItem) {
+        try {
+            CartDTO cart = cartService.addItemToCurrentUserCart(request, cartItem);
+            APIResponse<CartDTO> apiResponse = new APIResponse<>(HttpStatus.OK, cart);
+            return ResponseEntity.ok(apiResponse);
+        } catch (Exception e) {
+            APIResponse<?> apiResponse = new APIResponse<>(HttpStatus.NOT_FOUND, e.getMessage(), null);
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(apiResponse);
+        }
     }
 
-    @DeleteMapping("/user/current/items/{productId}")
-    public ResponseEntity<CartDto> removeItemFromCart(
+    @DeleteMapping("/items/{productId}")
+    public ResponseEntity<APIResponse<?>> removeItemFromCart(
             HttpServletRequest request,
-            @PathVariable Long productId) {
-        return ResponseEntity.ok(cartService.removeItemFromCurrentUserCart(request, productId));
+            @PathVariable String productId) {
+        try {
+            CartDTO cart = cartService.removeItemFromCurrentUserCart(request, productId);
+            APIResponse<CartDTO> apiResponse = new APIResponse<>(HttpStatus.OK, cart);
+            return ResponseEntity.ok(apiResponse);
+        } catch (Exception e) {
+            APIResponse<?> apiResponse = new APIResponse<>(HttpStatus.NOT_FOUND, e.getMessage(), null);
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(apiResponse);
+        }
     }
 
-    @DeleteMapping("/user/current/clear")
+    @DeleteMapping("/clear")
     public ResponseEntity<Void> clearCart(HttpServletRequest request) {
         cartService.clearCurrentUserCart(request);
         return ResponseEntity.noContent().build();
     }
 
-    @PostMapping("/user/current/checkout")
-    public ResponseEntity<CartDto> checkoutCart(HttpServletRequest request) {
-        return ResponseEntity.ok(cartService.prepareCurrentUserCartForCheckout(request));
+    @PostMapping("/checkout")
+    public ResponseEntity<APIResponse<?>> checkoutCart(HttpServletRequest request) {
+        try {
+            CartDTO cart = cartService.prepareCurrentUserCartForCheckout(request);
+            APIResponse<CartDTO> apiResponse = new APIResponse<>(HttpStatus.OK, cart);
+            return ResponseEntity.ok(apiResponse);
+        } catch (Exception e) {
+            APIResponse<?> apiResponse = new APIResponse<>(HttpStatus.NOT_FOUND, e.getMessage(), null);
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(apiResponse);
+        }
     }
 }

@@ -13,8 +13,6 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @EnableWebSecurity
 @EnableMethodSecurity(prePostEnabled = true)
 public class AppSecurity {
-
-
 	@Bean
 	public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception{
 
@@ -25,7 +23,5 @@ public class AppSecurity {
 				);
 		return http.build();
 	}
-
-
 }
 
