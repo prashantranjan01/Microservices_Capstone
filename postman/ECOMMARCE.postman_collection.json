@@ -166,13 +166,13 @@
 						"header": [
 							{
 								"key": "Authorization",
-								"value": "Bearer eyJhbGciOiJIUzUxMiJ9.eyJqdGkiOiJhdXRoLXNlcnZpY2UiLCJzdWIiOiI3ZjY5MzIyZC1hZjFjLTQyNGItOTFiNy0zZGI3M2UyYTUyZDAiLCJhdXRob3JpdGllcyI6WyJST0xFX1VTRVIiXSwiaWF0IjoxNzQ2MTA2MDA2LCJleHAiOjE3NDYxMjQwMDZ9.Ae-XhFYhPxcYFqm6VC1Ql1g4vG5qO-ZVWOYTzozajjKFxsX8Gbh1iSehEYg6MHLF6xRD1Ky0qALqIG_bIZ6_-w",
+								"value": "Bearer eyJhbGciOiJIUzUxMiJ9.eyJqdGkiOiJhdXRoLXNlcnZpY2UiLCJzdWIiOiI3ZjY5MzIyZC1hZjFjLTQyNGItOTFiNy0zZGI3M2UyYTUyZDAiLCJhdXRob3JpdGllcyI6WyJST0xFX1VTRVIiXSwiaWF0IjoxNzQ2MTMzNjMyLCJleHAiOjE3NDYxNTE2MzJ9.4trX2gMSvBoHc38XVgBiQLRKnAzal1c-Trl_eIRhITkod8Gtu6TothtSgx0RaaPoJwY0vqFWTDglbSrjuu17yQ",
 								"type": "text"
 							}
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"name\":\"Iphone 13\",\r\n    \"price\":87999,\r\n    \"stockQuantity\":50\r\n}",
+							"raw": "{\r\n    \"name\":\"Banana\",\r\n    \"price\":32,\r\n    \"stockQuantity\":50\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -180,7 +180,7 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:8082/api/product",
+							"raw": "http://localhost:8082/api/category/7b47f95f-05ab-463c-85ab-82193a853fdf/sub-category/1fe57503-4d1c-4fd1-86c1-174f0ce99d28/product",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -188,6 +188,10 @@
 							"port": "8082",
 							"path": [
 								"api",
+								"category",
+								"7b47f95f-05ab-463c-85ab-82193a853fdf",
+								"sub-category",
+								"1fe57503-4d1c-4fd1-86c1-174f0ce99d28",
 								"product"
 							]
 						}
@@ -212,7 +216,72 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:8082/api/product",
+							"raw": "http://localhost:8082/api/products",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8082",
+							"path": [
+								"api",
+								"products"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Product By Id",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8082/api/product/d7c7133c-5968-4987-9e1e-703d33dbf55a",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8082",
+							"path": [
+								"api",
+								"product",
+								"d7c7133c-5968-4987-9e1e-703d33dbf55a"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Product By Status",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8082/api/product?status=ACTIVE",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -221,6 +290,84 @@
 							"path": [
 								"api",
 								"product"
+							],
+							"query": [
+								{
+									"key": "status",
+									"value": "ACTIVE"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Category",
+			"item": [
+				{
+					"name": "Create Category",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzUxMiJ9.eyJqdGkiOiJhdXRoLXNlcnZpY2UiLCJzdWIiOiI3ZjY5MzIyZC1hZjFjLTQyNGItOTFiNy0zZGI3M2UyYTUyZDAiLCJhdXRob3JpdGllcyI6WyJST0xFX1VTRVIiXSwiaWF0IjoxNzQ2MTMyNTU3LCJleHAiOjE3NDYxNTA1NTd9.JkrlG8oyoGNl0WOwOeIdMrnyrQbUhax68O1d3Y_iR4zbU8_tSgYVM3cKUeMJA6LmoJR1QZehdPvx8Vhz_F2OhQ",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"title\":\"Fruits & Vegetables\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8082/api/category",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8082",
+							"path": [
+								"api",
+								"category"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get All Category",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8082/api/categories",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8082",
+							"path": [
+								"api",
+								"categories"
 							]
 						}
 					},
@@ -291,6 +438,290 @@
 					"response": []
 				}
 			]
+		},
+		{
+			"name": "Sub Category",
+			"item": [
+				{
+					"name": "Create Sub Category",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzUxMiJ9.eyJqdGkiOiJhdXRoLXNlcnZpY2UiLCJzdWIiOiI3ZjY5MzIyZC1hZjFjLTQyNGItOTFiNy0zZGI3M2UyYTUyZDAiLCJhdXRob3JpdGllcyI6WyJST0xFX1VTRVIiXSwiaWF0IjoxNzQ2MTMzNjMyLCJleHAiOjE3NDYxNTE2MzJ9.4trX2gMSvBoHc38XVgBiQLRKnAzal1c-Trl_eIRhITkod8Gtu6TothtSgx0RaaPoJwY0vqFWTDglbSrjuu17yQ",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"title\":\"Fruits\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8082/api/category/7b47f95f-05ab-463c-85ab-82193a853fdf/sub-category",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8082",
+							"path": [
+								"api",
+								"category",
+								"7b47f95f-05ab-463c-85ab-82193a853fdf",
+								"sub-category"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get All Category",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8082/api/categories",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8082",
+							"path": [
+								"api",
+								"categories"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Product By Id",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8082/api/product",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8082",
+							"path": [
+								"api",
+								"product"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Product By Status",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8082/api/product",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8082",
+							"path": [
+								"api",
+								"product"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Cart",
+			"item": [
+				{
+					"name": "Get Cart",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzUxMiJ9.eyJqdGkiOiJhdXRoLXNlcnZpY2UiLCJzdWIiOiI3ZjY5MzIyZC1hZjFjLTQyNGItOTFiNy0zZGI3M2UyYTUyZDAiLCJhdXRob3JpdGllcyI6WyJST0xFX1VTRVIiXSwiaWF0IjoxNzQ2MjE2ODY5LCJleHAiOjE3NDYyMzQ4Njl9.3U_hjqrzm6ryjE5Srw8JIfFepz4AANuMWW-pqlNSzQZ9oBHyebejdA9Z3SHJzYCbAKL4Hd4VbqoMTPJMQYO1Pg",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:8083/api/cart",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8083",
+							"path": [
+								"api",
+								"cart"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Checkout",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzUxMiJ9.eyJqdGkiOiJhdXRoLXNlcnZpY2UiLCJzdWIiOiI3ZjY5MzIyZC1hZjFjLTQyNGItOTFiNy0zZGI3M2UyYTUyZDAiLCJhdXRob3JpdGllcyI6WyJST0xFX1VTRVIiXSwiaWF0IjoxNzQ2MjE2ODY5LCJleHAiOjE3NDYyMzQ4Njl9.3U_hjqrzm6ryjE5Srw8JIfFepz4AANuMWW-pqlNSzQZ9oBHyebejdA9Z3SHJzYCbAKL4Hd4VbqoMTPJMQYO1Pg",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:8083/api/cart/checkout",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8083",
+							"path": [
+								"api",
+								"cart",
+								"checkout"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Checkout Copy",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzUxMiJ9.eyJqdGkiOiJhdXRoLXNlcnZpY2UiLCJzdWIiOiI3ZjY5MzIyZC1hZjFjLTQyNGItOTFiNy0zZGI3M2UyYTUyZDAiLCJhdXRob3JpdGllcyI6WyJST0xFX1VTRVIiXSwiaWF0IjoxNzQ2MjE2ODY5LCJleHAiOjE3NDYyMzQ4Njl9.3U_hjqrzm6ryjE5Srw8JIfFepz4AANuMWW-pqlNSzQZ9oBHyebejdA9Z3SHJzYCbAKL4Hd4VbqoMTPJMQYO1Pg",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:8083/api/cart/clear",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8083",
+							"path": [
+								"api",
+								"cart",
+								"clear"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Add Item to Cart",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzUxMiJ9.eyJqdGkiOiJhdXRoLXNlcnZpY2UiLCJzdWIiOiI3ZjY5MzIyZC1hZjFjLTQyNGItOTFiNy0zZGI3M2UyYTUyZDAiLCJhdXRob3JpdGllcyI6WyJST0xFX1VTRVIiXSwiaWF0IjoxNzQ2MjE2ODY5LCJleHAiOjE3NDYyMzQ4Njl9.3U_hjqrzm6ryjE5Srw8JIfFepz4AANuMWW-pqlNSzQZ9oBHyebejdA9Z3SHJzYCbAKL4Hd4VbqoMTPJMQYO1Pg",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"productId\" : \"6296e532-5a86-4b5e-bcf6-97f4baa6060b\",\r\n    \"quantity\":3\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8083/api/cart/items",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8083",
+							"path": [
+								"api",
+								"cart",
+								"items"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"auth": {
+		"type": "bearer"
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
 		}
 	]
 }
