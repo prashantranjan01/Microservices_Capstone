@@ -1,39 +1,33 @@
-package com.wipro.cart_service.entity;
+package com.wipro.cart_service.dto;
 
 
-import jakarta.persistence.*;
-import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.UpdateTimestamp;
+import com.wipro.cart_service.entity.Cart;
+import com.wipro.cart_service.entity.CartItem;
+import com.wipro.cart_service.entity.CartStatus;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 
-@Entity
-@Table(name = "cart")
-public class Cart {
-
-    @Id
-    @Column(updatable = false, nullable = false, unique = true)
+public class CartDTO {
     private String id;
-
-    @Column(name = "user_id", nullable = false)
     private String userId;
-
-    @CreationTimestamp
-    @Column(name = "created_at", updatable = false)
     private LocalDateTime createdAt;
-
-    @UpdateTimestamp
-    @Column(name = "updated_at")
     private LocalDateTime updatedAt;
+    private CartStatus status;
+    private List<CartItem> items;
+    private double totalAmount;
 
-    @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
-    private CartStatus status = CartStatus.ACTIVE;
+    public CartDTO(Cart cart) {
+        this.id = cart.getId();
+        this.userId = cart.getUserId();
+        this.items = cart.getItems();
+        this.status = cart.getStatus();
+        this.updatedAt = cart.getUpdatedAt();
+        this.createdAt = cart.getCreatedAt();
+    }
 
-    @OneToMany(mappedBy = "cart", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<CartItem> items = new ArrayList<>();
+    public CartDTO() {
+    }
 
     public String getId() {
         return id;
@@ -82,5 +76,12 @@ public class Cart {
     public void setItems(List<CartItem> items) {
         this.items = items;
     }
-}
 
+    public double getTotalAmount() {
+        return totalAmount;
+    }
+
+    public void setTotalAmount(double totalAmount) {
+        this.totalAmount = totalAmount;
+    }
+}

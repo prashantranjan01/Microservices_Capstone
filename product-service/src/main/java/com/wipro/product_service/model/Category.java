@@ -1,5 +1,6 @@
 package com.wipro.product_service.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
@@ -31,9 +32,11 @@ public class Category {
     private LocalDateTime updatedAt;
 
     @OneToMany(mappedBy = "category" , cascade = CascadeType.ALL , fetch = FetchType.LAZY)
+    @JsonIgnore
     private List<SubCategory> subCategories = new ArrayList<>();
 
     @OneToMany(mappedBy = "category" , cascade = CascadeType.ALL , fetch = FetchType.LAZY)
+    @JsonIgnore
     private List<Product> products = new ArrayList<>();
 
     public String getCreatedBy() {

@@ -45,7 +45,7 @@ public class ProductController {
         return ResponseEntity.ok(listAPIResponse);
     }
 
-    @PostMapping("/category/{categoryId}/sub-category/{subCategoryId}/product")
+    @PostMapping("/product/category/{categoryId}/sub-category/{subCategoryId}")
     public ResponseEntity<APIResponse<?>> createProduct(
             @RequestBody Product product,
             @PathVariable String categoryId,

@@ -1,7 +1,6 @@
 package com.wipro.product_service.controller;
 
 import com.wipro.product_service.dto.APIResponse;
-import com.wipro.product_service.dto.SubCategoryDTO;
 import com.wipro.product_service.model.SubCategory;
 import com.wipro.product_service.service.SubCategoryService;
 import jakarta.servlet.http.HttpServletRequest;
@@ -23,8 +22,8 @@ public class SubCategoryController {
             @PathVariable String categoryId,
             HttpServletRequest request){
         try {
-            SubCategoryDTO subCategoryDTO = this.subCategoryService.createSubCategory(subCategory,categoryId, request);
-            APIResponse<SubCategoryDTO> apiResponse = new APIResponse<>(HttpStatus.CREATED, "Subcategory created successfully.", subCategoryDTO);
+            SubCategory subCategoryDTO = this.subCategoryService.createSubCategory(subCategory, categoryId, request);
+            APIResponse<SubCategory> apiResponse = new APIResponse<>(HttpStatus.CREATED, "Subcategory created successfully.", subCategoryDTO);
             return ResponseEntity.status(HttpStatus.CREATED).body(apiResponse);
         } catch (Exception e) {
             APIResponse<?> apiResponse = new APIResponse<>(HttpStatus.BAD_REQUEST, e.getMessage(), null);

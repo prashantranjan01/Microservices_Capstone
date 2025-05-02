@@ -1,12 +1,20 @@
 package com.wipro.cart_service.exception;
 
-import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.ResponseStatus;
+public class PermissionDeniedException extends RuntimeException {
 
-@ResponseStatus(HttpStatus.NOT_FOUND)
+    public PermissionDeniedException() {
+        super("Permission denied.");
+    }
 
-public class PermissionDeniedException extends RuntimeException{
     public PermissionDeniedException(String message) {
         super(message);
+    }
+
+    public PermissionDeniedException(String message, Throwable cause) {
+        super(message, cause);
+    }
+
+    public PermissionDeniedException(Throwable cause) {
+        super(cause);
     }
 }
