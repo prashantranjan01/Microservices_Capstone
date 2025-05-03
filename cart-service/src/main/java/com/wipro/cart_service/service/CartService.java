@@ -14,5 +14,5 @@ public interface CartService {
 
     void clearCurrentUserCart(HttpServletRequest request);
 
-    CartDTO prepareCurrentUserCartForCheckout(HttpServletRequest request);
+    void chekout(HttpServletRequest request);
 }

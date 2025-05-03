@@ -19,6 +19,7 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -66,6 +67,15 @@ public class AuthServiceImpl implements AuthService {
             throw new UserNotFoundException("User with username : " + username + " not found.");
         }
         return new UserData(user);
+    }
+
+    @Override
+    public UserData findById(String id) throws UserNotFoundException {
+        Optional<User> user = userRepo.findById(id);
+        if (user.isEmpty()) {
+            throw new UserNotFoundException("User with id : " + id + " not found.");
+        }
+        return new UserData(user.get());
     }
 
     @Override

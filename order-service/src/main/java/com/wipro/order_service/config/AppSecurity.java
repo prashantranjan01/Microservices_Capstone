@@ -1,6 +1,5 @@
 package com.wipro.order_service.config;
 
-import com.wipro.cart_service.config.JwtAuthenticationFilter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;

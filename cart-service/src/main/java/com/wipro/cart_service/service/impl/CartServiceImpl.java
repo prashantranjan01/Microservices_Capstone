@@ -69,7 +69,7 @@ public class CartServiceImpl implements CartService {
         if (responseEntity.getStatusCode() != HttpStatus.OK) {
             throw new APIException("Failed to get product from product microservice.");
         }
-        APIResponse apiResponse = mapper.convertValue(responseEntity.getBody(), APIResponse.class);
+        APIResponse<?> apiResponse = mapper.convertValue(responseEntity.getBody(), APIResponse.class);
 
         if (apiResponse.getData() == null) {
             throw new APIException("Failed to get product from product microservice.");
@@ -119,7 +119,7 @@ public class CartServiceImpl implements CartService {
     }
 
     @Transactional
-    public CartDTO prepareCurrentUserCartForCheckout(HttpServletRequest request) {
+    public void chekout(HttpServletRequest request) {
         if (!permissionService.hasPermission(request, "CHECKOUT")) {
             throw new PermissionDeniedException();
         }
@@ -130,11 +130,8 @@ public class CartServiceImpl implements CartService {
             throw new CartException("Cannot checkout with empty cart");
         }
 
-        cart.setStatus(CartStatus.PENDING_CHECKOUT);
-        Cart savedCart = cartRepository.save(cart);
-        CartDTO cartDTO = new CartDTO(savedCart);
-        cartDTO.setTotalAmount(calculateTotalPrice(cart.getItems()));
-        return cartDTO;
+        cart.setStatus(CartStatus.CHECKOUT);
+        cartRepository.save(cart);
     }
 
     private double calculateTotalPrice(List<CartItem> items) {

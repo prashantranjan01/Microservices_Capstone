@@ -66,14 +66,7 @@ public class CartController {
     }
 
     @PostMapping("/checkout")
-    public ResponseEntity<APIResponse<?>> checkoutCart(HttpServletRequest request) {
-        try {
-            CartDTO cart = cartService.prepareCurrentUserCartForCheckout(request);
-            APIResponse<CartDTO> apiResponse = new APIResponse<>(HttpStatus.OK, cart);
-            return ResponseEntity.ok(apiResponse);
-        } catch (Exception e) {
-            APIResponse<?> apiResponse = new APIResponse<>(HttpStatus.NOT_FOUND, e.getMessage(), null);
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(apiResponse);
-        }
+    public void checkoutCart(HttpServletRequest request) {
+        cartService.chekout(request);
     }
 }

@@ -6,6 +6,7 @@ import com.wipro.auth_service.dto.UserData;
 import com.wipro.auth_service.exception.UserNotFoundException;
 import com.wipro.auth_service.service.AuthService;
 import com.wipro.auth_service.service.RoleService;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -22,18 +23,27 @@ public class UserController {
     RoleService roleService;
 
     @GetMapping
-    public ResponseEntity<APIResponse<?>> getUserByUsername(@RequestParam String username) {
+    public ResponseEntity<APIResponse<?>> getUserByIdOrUsername(
+            @RequestParam String id,
+            @RequestParam String username) {
         try {
-            UserData user = userService.findByUsername(username);
-            APIResponse<UserData> userAPIResponse = new APIResponse<>(HttpStatus.OK, user);
-            return ResponseEntity.ok(userAPIResponse);
+            if(StringUtils.isBlank(id)){
+                UserData user = userService.findById(id);
+                APIResponse<UserData> userAPIResponse = new APIResponse<>(HttpStatus.OK, user);
+                return ResponseEntity.ok(userAPIResponse);
+            }
+            if(StringUtils.isBlank(username)){
+                UserData user = userService.findByUsername(username);
+                APIResponse<UserData> userAPIResponse = new APIResponse<>(HttpStatus.OK, user);
+                return ResponseEntity.ok(userAPIResponse);
+            }
+            APIResponse<?> userNotAPIResponse = new APIResponse<>(HttpStatus.NOT_FOUND, "User not found.", null);
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(userNotAPIResponse);
         } catch (UserNotFoundException e) {
             APIResponse<?> userNotAPIResponse = new APIResponse<>(HttpStatus.NOT_FOUND, "User not found.", null);
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(userNotAPIResponse);
         }
     }
-
-    //update user - fname , lname
 
     @PutMapping
     public ResponseEntity<APIResponse<?>> updateUser(@RequestParam String username,
