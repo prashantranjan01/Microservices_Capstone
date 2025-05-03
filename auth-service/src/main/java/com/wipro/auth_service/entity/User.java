@@ -29,6 +29,9 @@ public class User {
     @Column(name = "password")
     String password;
 
+    @Column(name = "address")
+    String address;
+
     @Column(name = "salt")
     String salt;
 

@@ -1,7 +1,16 @@
 package com.wipro.order_service.service.impl;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.wipro.order_service.client.AuthServiceClient;
+import com.wipro.order_service.client.CartServiceClient;
+import com.wipro.order_service.dto.APIResponse;
+import com.wipro.order_service.dto.CartDTO;
+import com.wipro.order_service.dto.UserDTO;
 import com.wipro.order_service.entity.Order;
+import com.wipro.order_service.entity.OrderStatus;
+import com.wipro.order_service.exception.APIException;
+import com.wipro.order_service.exception.OrderException;
+import com.wipro.order_service.exception.PermissionDeniedException;
 import com.wipro.order_service.repository.OrderRepository;
 import com.wipro.order_service.service.OrderService;
 import jakarta.servlet.http.HttpServletRequest;
@@ -32,56 +41,56 @@ public class OrderServiceImpl implements OrderService {
     private OrderRepository orderRepository;
 
     @Autowired
-//    private CartServiceClient cartServiceClient;
-//
+    private CartServiceClient cartServiceClient;
+
     @Autowired
     private AuthServiceClient authServiceClient;
-//
-//    @Autowired
-//    private ProductServiceClient productServiceClient;
+
 
     @Transactional
     public Order createOrder(HttpServletRequest request) {
 
-        User user = authServiceClient.getUserById(getCurrentUserId());
-//
-//        // Get cart details
-//        CartDto cart = cartServiceClient.getCart(userId);
+        ObjectMapper mapper = new ObjectMapper();
+        ResponseEntity<?> authResponseEntity = authServiceClient.getUserByIdOrUsername(getCurrentUserId() , null);
+
+        if (authResponseEntity.getStatusCode() != HttpStatus.OK) {
+            throw new APIException("Failed to get user from auth microservice.");
+        }
+        APIResponse<?> authApiResponse = mapper.convertValue(authResponseEntity.getBody(), APIResponse.class);
+
+        if (authApiResponse.getData() == null) {
+            throw new APIException("Failed to get user from auth microservice.");
+        }
+
+        UserDTO user = mapper.convertValue(authApiResponse.getData(), UserDTO.class);
+
+        ResponseEntity<?> cartResponseEntity = cartServiceClient.getCurrentUserCart(request);
+
+        if (cartResponseEntity.getStatusCode() != HttpStatus.OK) {
+            throw new APIException("Failed to get cart from cart microservice.");
+        }
+        APIResponse<?> cartApiResponse = mapper.convertValue(cartResponseEntity.getBody(), APIResponse.class);
+
+        if (cartApiResponse.getData() == null) {
+            throw new APIException("Failed to get user from auth microservice.");
+        }
+
+        CartDTO cart = mapper.convertValue(cartApiResponse.getData(), CartDTO.class);
+
 //        if (cart.getItems().isEmpty()) {
 //            throw new OrderException("Cannot create order with empty cart");
 //        }
-//
-//        // Calculate total amount
-//        double totalAmount = cart.getItems().stream()
-//                .mapToDouble(item -> item.getPrice() * item.getQuantity())
-//                .sum();
-//
-//        // Create order
-//        Order order = new Order();
-//        order.setUserId(userId);
-//        order.setCartId(cart.getId());
-//        order.setStatus(OrderStatus.PENDING);
-//        order.setTotalAmount(totalAmount);
-//        order.setShippingAddress(shippingAddress);
-//        order = orderRepository.save(order);
-//
-//        // Create order items
-//        List<OrderItem> orderItems = cart.getItems().stream().map(cartItem -> {
-//            OrderItem orderItem = new OrderItem();
-//            orderItem.setOrder(order);
-//            orderItem.setProductId(cartItem.getProductId());
-//            orderItem.setQuantity(cartItem.getQuantity());
-//            orderItem.setPricePerUnit(cartItem.getPrice());
-//            return orderItem;
-//        }).collect(Collectors.toList());
-//
-//        orderItemRepository.saveAll(orderItems);
-//
-//        // Clear the cart
-//        cartServiceClient.clearCart(userId);
-//
-//        return mapToDto(order);
-        return null;
+
+        Order order = new Order();
+        order.setUserId(user.getId());
+        order.setCartId(cart.getId());
+        order.setStatus(OrderStatus.PENDING);
+        order.setTotalAmount(cart.getTotalAmount());
+        order.setShippingAddress(user.getAddress());
+        order = orderRepository.save(order);
+
+        cartServiceClient.checkout(request);
+        return order;
     }
 
     private String getCurrentUserId() {

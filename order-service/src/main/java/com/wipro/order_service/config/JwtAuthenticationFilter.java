@@ -1,6 +1,6 @@
 package com.wipro.order_service.config;
 
-import com.wipro.cart_service.util.AppConstant;
+import com.wipro.order_service.util.AppConstant;
 import io.jsonwebtoken.*;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;

@@ -14,6 +14,8 @@ public interface AuthService {
 
     UserData findByUsername(String username) throws UserNotFoundException;
 
+    UserData findById(String id) throws UserNotFoundException;
+
     UserData updateByUsername(String username,UserData updatedUser) throws UserNotFoundException;
 
     void changePassword(String username,String currentPassword,String UpdatedPassword) throws UserNotFoundException;

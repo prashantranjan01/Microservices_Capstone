@@ -1,6 +1,7 @@
 package com.wipro.order_service.client;
 
 import org.springframework.cloud.openfeign.FeignClient;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -12,4 +13,8 @@ public interface AuthServiceClient {
     boolean hasPermission(
             @RequestHeader("Authorization") String authHeader,
             @RequestParam String action);
+
+    @GetMapping("/api/user")
+    ResponseEntity<?> getUserByIdOrUsername(@RequestParam String id,
+                                            @RequestParam String username);
 }

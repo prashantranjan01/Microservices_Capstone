@@ -1,12 +1,6 @@
 package com.wipro.order_service.dto;
 
-
-import com.wipro.cart_service.entity.Cart;
-import com.wipro.cart_service.entity.CartItem;
-import com.wipro.cart_service.entity.CartStatus;
-
 import java.time.LocalDateTime;
-import java.util.List;
 
 public class CartDTO {
     private String id;
@@ -14,17 +8,7 @@ public class CartDTO {
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
     private String status;
-    private List<CartItem> items;
     private double totalAmount;
-
-    public CartDTO(Cart cart) {
-        this.id = cart.getId();
-        this.userId = cart.getUserId();
-        this.items = cart.getItems();
-        this.status = cart.getStatus();
-        this.updatedAt = cart.getUpdatedAt();
-        this.createdAt = cart.getCreatedAt();
-    }
 
     public CartDTO() {
     }
@@ -61,20 +45,12 @@ public class CartDTO {
         this.updatedAt = updatedAt;
     }
 
-    public CartStatus getStatus() {
+    public String getStatus() {
         return status;
     }
 
-    public void setStatus(CartStatus status) {
+    public void setStatus(String status) {
         this.status = status;
-    }
-
-    public List<CartItem> getItems() {
-        return items;
-    }
-
-    public void setItems(List<CartItem> items) {
-        this.items = items;
     }
 
     public double getTotalAmount() {
