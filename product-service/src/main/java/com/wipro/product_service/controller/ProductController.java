@@ -13,20 +13,20 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/product")
 public class ProductController {
 
     @Autowired
     ProductService productService;
 
-    @GetMapping("/products")
+    @GetMapping("/retrieve/products")
     public ResponseEntity<APIResponse<List<Product>>> getAllProducts() {
         List<Product> productList = productService.getAllProducts();
         APIResponse<List<Product>> listAPIResponse = new APIResponse<>(HttpStatus.OK , productList);
         return ResponseEntity.ok(listAPIResponse);
     }
 
-    @GetMapping("/product/{id}")
+    @GetMapping("/{id}")
     public ResponseEntity<APIResponse<?>> getProductById(@PathVariable String id) {
         try {
             Product product = productService.getProductById(id);
@@ -38,14 +38,14 @@ public class ProductController {
         }
     }
 
-    @GetMapping("/product")
+    @GetMapping
     public ResponseEntity<APIResponse<List<Product>>> getProductByStatus(@RequestParam ProductStatus status) {
         List<Product> productList = productService.getAllProductsByStatus(status);
         APIResponse<List<Product>> listAPIResponse = new APIResponse<>(HttpStatus.OK , productList);
         return ResponseEntity.ok(listAPIResponse);
     }
 
-    @PostMapping("/product/category/{categoryId}/sub-category/{subCategoryId}")
+    @PostMapping("/category/{categoryId}/sub-category/{subCategoryId}")
     public ResponseEntity<APIResponse<?>> createProduct(
             @RequestBody Product product,
             @PathVariable String categoryId,

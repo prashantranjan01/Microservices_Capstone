@@ -12,13 +12,13 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/category")
 public class CategoryController {
 
     @Autowired
     private CategoryService categoryService;
 
-    @PostMapping("/category")
+    @PostMapping
     public ResponseEntity<APIResponse<?>> createCategory(
             @RequestBody Category category,
             HttpServletRequest request){
@@ -47,14 +47,14 @@ public class CategoryController {
 //        return new ResponseEntity<ApiResponse>( new ApiResponse("Category Deleted Successfully" , true) , HttpStatus.OK);
 //    }
 
-    @GetMapping("/categories")
+    @GetMapping("/retrieve/categories")
     public ResponseEntity<APIResponse<List<Category>>> getAllCategories() {
         List<Category> categoryDTOList = categoryService.getAllCategories();
         APIResponse<List<Category>> apiResponse = new APIResponse<>(HttpStatus.OK, categoryDTOList);
         return ResponseEntity.ok(apiResponse);
     }
 
-    @GetMapping("/category/{id}")
+    @GetMapping("/{id}")
     public ResponseEntity<APIResponse<?>> getCategory(@PathVariable String id) {
         try {
             Category categoryDTO = categoryService.getCategoryById(id);
