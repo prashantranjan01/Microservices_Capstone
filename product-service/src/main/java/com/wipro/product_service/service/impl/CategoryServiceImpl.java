@@ -4,6 +4,7 @@ import com.wipro.product_service.exception.PermissionDeniedException;
 import com.wipro.product_service.exception.ResourceNotFoundException;
 import com.wipro.product_service.exception.ResourceServiceException;
 import com.wipro.product_service.model.Category;
+import com.wipro.product_service.model.CategoryAction;
 import com.wipro.product_service.repository.CategoryRepository;
 import com.wipro.product_service.service.CategoryService;
 import jakarta.servlet.http.HttpServletRequest;
@@ -30,7 +31,7 @@ public class CategoryServiceImpl implements CategoryService {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String userId = authentication.getName();
 
-        if (!permissionService.hasPermission(request, "CREATE_CATEGORY")) {
+        if (!permissionService.hasPermission(request, String.valueOf(CategoryAction.CREATE_CATEGORY))) {
             throw new PermissionDeniedException();
         }
 
@@ -55,25 +56,4 @@ public class CategoryServiceImpl implements CategoryService {
     public List<Category> getAllCategories() {
         return this.categoryRepository.findAll();
     }
-
-
-//    @Override
-//    public void deleteCategory(long categoryId) {
-//        Category category = this.categoryRepository.findById(categoryId).orElseThrow(() -> new ResourceNotFoundException("Category" , "id" , categoryId));
-//
-//        this.categoryRepository.delete(category);
-//    }
-//
-//    @Override
-//    public CategoryDto updateCategory(CategoryDto categoryDto, long categoryId) {
-//
-//        Category category = this.categoryRepository.findById(categoryId).orElseThrow(() -> new ResourceNotFoundException("Category" , "id" , categoryId));
-//
-//        category.setImageUrl(categoryDto.getImageUrl());
-//
-//        Category updatedCategory = this.categoryRepository.save(category);
-//
-//        return this.categoryToDto(updatedCategory);
-//    }
-
 }

@@ -13,12 +13,9 @@ public class RoleController {
     @Autowired
     RoleService roleService;
 
+    //create role - post
 
-    //create role
+    //delete role - delete {id}
 
-    //update role
-
-    //delete role
-
-    //change flag
+    //change flag - put change flag
 }

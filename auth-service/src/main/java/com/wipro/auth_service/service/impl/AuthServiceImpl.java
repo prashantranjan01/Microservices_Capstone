@@ -91,6 +91,9 @@ public class AuthServiceImpl implements AuthService {
         if(updatedUser.getLastname()!=null){
             existinguser.setLastname(updatedUser.getLastname());
         }
+        if(updatedUser.getAddress()!=null){
+            existinguser.setAddress(updatedUser.getAddress());
+        }
         existinguser.setUpdatedAt(LocalDateTime.now());
         User savedUser= userRepo.save(existinguser);
         return new UserData(savedUser);
