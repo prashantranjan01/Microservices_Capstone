@@ -31,6 +31,7 @@ public class CategoryController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(apiResponse);
         }
     }
+    //TODO update and delete api
 
 //    @PutMapping("/category/{categoryId}")
 //    @PreAuthorize("hasRole('ADMIN')")

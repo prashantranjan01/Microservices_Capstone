@@ -4,6 +4,7 @@ package com.wipro.cart_service.controller;
 import com.wipro.cart_service.dto.APIResponse;
 import com.wipro.cart_service.dto.CartDTO;
 import com.wipro.cart_service.entity.CartItem;
+import com.wipro.cart_service.entity.CartStatus;
 import com.wipro.cart_service.service.CartService;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -65,8 +66,18 @@ public class CartController {
         return ResponseEntity.noContent().build();
     }
 
-    @PostMapping("/checkout")
-    public void checkoutCart(HttpServletRequest request) {
-        cartService.chekout(request);
+    @PutMapping("/{cartId}/status")
+    public ResponseEntity<APIResponse<?>> updateCartStatus(
+            @PathVariable String cartId,
+            @RequestParam CartStatus status,
+            HttpServletRequest request) {
+        try {
+            CartDTO cart = cartService.updateCartStatus(request, cartId, status);
+            APIResponse<CartDTO> apiResponse = new APIResponse<>(HttpStatus.OK, cart);
+            return ResponseEntity.ok(apiResponse);
+        } catch (Exception e) {
+            APIResponse<?> apiResponse = new APIResponse<>(HttpStatus.BAD_REQUEST, e.getMessage(), null);
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(apiResponse);
+        }
     }
 }

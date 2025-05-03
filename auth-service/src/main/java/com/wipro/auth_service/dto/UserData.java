@@ -10,6 +10,7 @@ public class UserData {
     private String email;
     private String username;
     private int roleId;
+    private String address;
 
     public UserData() {
     }
@@ -21,6 +22,14 @@ public class UserData {
         this.email = user.getEmail();
         this.username = user.getUsername();
         this.roleId = user.getRoleId();
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
     }
 
     public String getId() {

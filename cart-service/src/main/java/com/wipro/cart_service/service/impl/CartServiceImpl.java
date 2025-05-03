@@ -1,5 +1,6 @@
 package com.wipro.cart_service.service.impl;
 
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.wipro.cart_service.client.ProductServiceClient;
 import com.wipro.cart_service.dto.APIResponse;
@@ -14,6 +15,7 @@ import com.wipro.cart_service.exception.PermissionDeniedException;
 import com.wipro.cart_service.repository.CartItemRepository;
 import com.wipro.cart_service.repository.CartRepository;
 import com.wipro.cart_service.service.CartService;
+import com.wipro.cart_service.service.TransmissionService;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -33,12 +35,18 @@ public class CartServiceImpl implements CartService {
 
     @Autowired
     CartRepository cartRepository;
+
     @Autowired
     CartItemRepository cartItemRepository;
+
     @Autowired
     ProductServiceClient productServiceClient;
+
     @Autowired
     PermissionService permissionService;
+
+    @Autowired
+    TransmissionService transmissionService;
 
     @Transactional
     @Override
@@ -63,21 +71,14 @@ public class CartServiceImpl implements CartService {
         String userId = getCurrentUserId();
         Cart cart = getOrCreateCart(userId);
 
-        ObjectMapper mapper = new ObjectMapper();
-
         ResponseEntity<?> responseEntity = productServiceClient.getProductById(itemDto.getProductId());
-        if (responseEntity.getStatusCode() != HttpStatus.OK) {
-            throw new APIException("Failed to get product from product microservice.");
-        }
-        APIResponse<?> apiResponse = mapper.convertValue(responseEntity.getBody(), APIResponse.class);
 
-        if (apiResponse.getData() == null) {
-            throw new APIException("Failed to get product from product microservice.");
-        }
-        ProductDTO product = mapper.convertValue(apiResponse.getData(), ProductDTO.class);
-        if (null == product) {
-            throw new APIException("Failed to get product from product microservice.");
-        }
+        ProductDTO product = transmissionService.sendAndReceive(
+                responseEntity,
+                new TypeReference<>() {
+                }
+        );
+
         if (product.getStockQuantity() <= 0) {
             throw new CartException("Product is out of stock");
         }
@@ -118,20 +119,23 @@ public class CartServiceImpl implements CartService {
         cartItemRepository.deleteByCartId(cart.getId());
     }
 
-    @Transactional
-    public void chekout(HttpServletRequest request) {
-        if (!permissionService.hasPermission(request, "CHECKOUT")) {
+    @Override
+    public CartDTO updateCartStatus(HttpServletRequest request, String cartId, CartStatus status) {
+        if (!permissionService.hasPermission(request, "CHANGE_CART_STATUS")) {
             throw new PermissionDeniedException();
         }
-        String userId = getCurrentUserId();
-        Cart cart = getOrCreateCart(userId);
+        Optional<Cart> optionalCart = cartRepository.findById(cartId);
 
-        if (cart.getItems().isEmpty()) {
-            throw new CartException("Cannot checkout with empty cart");
+        if(optionalCart.isEmpty()){
+            throw new CartException("Cart with id : " + cartId + " not found.");
         }
-
-        cart.setStatus(CartStatus.CHECKOUT);
-        cartRepository.save(cart);
+        Cart cart = optionalCart.get();
+        cart.setStatus(status);
+        Cart savedCart = cartRepository.save(cart);
+        CartDTO cartDTO = new CartDTO(savedCart);
+        cartDTO.setItems(this.cartItemRepository.findByCartId(cart.getId()));
+        cartDTO.setTotalAmount(calculateTotalPrice(cart.getItems()));
+        return cartDTO;
     }
 
     private double calculateTotalPrice(List<CartItem> items) {

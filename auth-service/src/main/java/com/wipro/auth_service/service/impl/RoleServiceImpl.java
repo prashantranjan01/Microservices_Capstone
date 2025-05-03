@@ -29,19 +29,9 @@ public class RoleServiceImpl implements RoleService {
         User user = userRepo.findById(id).orElseThrow(() -> new UserNotFoundException("User with ID " + id + " not found"));
         List<Role> roles = roleRepo.findByRoleIdAndAction(user.getRoleId(), action);
         if (null != roles && !roles.isEmpty()) {
-            Role role = roles.get(0);
+            Role role = roles.getFirst();
             return role.getFlag().equals("Y");
         }
         return false;
     }
-
-//    @Override
-//    public void changeRole(String username, RoleChangeRequest request) throws UserNotFoundException {
-//        User existinguser = userRepo.findByUsername(username);
-//        if (existinguser == null) {
-//            throw new UserNotFoundException("User with username : " + username + " not found.");
-//        }
-//        existinguser.setRoleId(request.roleId);
-//
-//    }
 }

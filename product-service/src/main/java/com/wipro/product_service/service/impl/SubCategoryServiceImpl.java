@@ -5,6 +5,7 @@ import com.wipro.product_service.exception.ResourceNotFoundException;
 import com.wipro.product_service.exception.ResourceServiceException;
 import com.wipro.product_service.model.Category;
 import com.wipro.product_service.model.SubCategory;
+import com.wipro.product_service.model.SubCategoryAction;
 import com.wipro.product_service.repository.CategoryRepository;
 import com.wipro.product_service.repository.SubCategoryRepository;
 import com.wipro.product_service.service.SubCategoryService;
@@ -36,7 +37,7 @@ public class SubCategoryServiceImpl implements SubCategoryService {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String userId = authentication.getName();
 
-        if (!permissionService.hasPermission(request, "CREATE_SUBCATEGORY")) {
+        if (!permissionService.hasPermission(request, String.valueOf(SubCategoryAction.CREATE_SUBCATEGORY))) {
             throw new PermissionDeniedException();
         }
 
