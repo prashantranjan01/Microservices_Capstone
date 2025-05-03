@@ -10,13 +10,13 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/sub-category")
 public class SubCategoryController {
 
     @Autowired
     SubCategoryService subCategoryService;
 
-    @PostMapping("/category/{categoryId}/sub-category")
+    @PostMapping("/category/{categoryId}")
     public ResponseEntity<APIResponse<?>> createSubCategory(
             @RequestBody SubCategory subCategory,
             @PathVariable String categoryId,
