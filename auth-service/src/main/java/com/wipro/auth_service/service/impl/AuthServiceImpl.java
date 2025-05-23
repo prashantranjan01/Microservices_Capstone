@@ -31,6 +31,10 @@ public class AuthServiceImpl implements AuthService {
 
     @Override
     public AuthData register(User user) {
+        User user1 = userRepo.findByUsername(user.getUsername());
+        if (user1 != null) {
+            throw new UserNotFoundException("User with username " + user1.getUsername() + " already Exists");
+        }
         String salt = BCrypt.gensalt();
         String hashedPassword = BCrypt.hashpw(user.getPassword(), salt);
         user.setSalt(salt);
