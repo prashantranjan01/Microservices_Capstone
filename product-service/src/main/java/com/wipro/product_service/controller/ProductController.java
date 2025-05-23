@@ -61,6 +61,10 @@ public class ProductController {
         }
     }
 
+
+    @GetMapping("/search/products?search='sdsds'")
+
+
 //    @PutMapping("/{id}")
 //    public ResponseEntity<ProductResponse> updateProduct(
 //            @PathVariable Long id,

@@ -1,0 +1,31 @@
+import axios from 'axios';
+import type { AuthResponse } from '../types/Auth/AuthResponse';
+import type { User } from '../types/User';
+import type { APIResponse } from '../types/APIResponse';
+const AUTH_API_URL = 'http://localhost:8080/api/auth'; 
+
+export const authService = {
+  login: async (username: string, password: string): Promise<APIResponse<AuthResponse>> => {
+    const res = await axios.post<APIResponse<AuthResponse>>(`${AUTH_API_URL}/login?username=${username}&password=${password}`);
+    return res.data;
+  },
+
+  logout: () => {
+    localStorage.removeItem('token');
+    localStorage.removeItem('user');
+  },
+
+  saveSession: (token: string, user: User) => {
+    localStorage.setItem('token', token);
+    localStorage.setItem('user', JSON.stringify(user));
+  },
+
+  getToken: (): string | null => localStorage.getItem('token'),
+
+  getUser: (): User | null => {
+    const user = localStorage.getItem('user');
+    return user ? JSON.parse(user) : null;
+  },
+
+  isAuthenticated: (): boolean => !!localStorage.getItem('token'),
+};
