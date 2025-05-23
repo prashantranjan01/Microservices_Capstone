@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -55,5 +56,32 @@ public class CategoryServiceImpl implements CategoryService {
     @Override
     public List<Category> getAllCategories() {
         return this.categoryRepository.findAll();
+    }
+
+    @Override
+    public Category updateCategory(Category category, String id) {
+
+        Optional<Category> optionalCategory = categoryRepository.findById(id);
+        if(optionalCategory.isEmpty()){
+            throw new ResourceServiceException("Category with id: "+id+" not found");
+        }
+        Category existingCategory = optionalCategory.get();
+        if (category.getImageUrl() != null) {
+            existingCategory.setImageUrl(category.getImageUrl());
+        }
+        if(category.getTitle()!=null){
+            existingCategory.setTitle(category.getTitle());
+        }
+        existingCategory.setUpdatedAt(LocalDateTime.now());
+        return categoryRepository.save(existingCategory);
+    }
+
+    @Override
+    public void deleteCategory(String id) {
+        Optional<Category> optionalCategory = categoryRepository.findById(id);
+        if(optionalCategory.isEmpty()){
+            throw new ResourceServiceException("Category with id: "+id+" not found");
+        }
+        this.categoryRepository.delete(optionalCategory.get());
     }
 }

@@ -24,15 +24,22 @@ public class UserController {
 
     @GetMapping
     public ResponseEntity<APIResponse<?>> getUserByIdOrUsername(
-            @RequestParam String id,
-            @RequestParam String username) {
+            @RequestParam(required = false) String id,
+            @RequestParam(required = false) String username) {
         try {
-            if(StringUtils.isBlank(id)){
+            if (StringUtils.isBlank(id) && StringUtils.isBlank(username)) {
+                APIResponse<?> badRequestResponse = new APIResponse<>(
+                        HttpStatus.BAD_REQUEST,
+                        "Either id or username must be provided",
+                        null);
+                return ResponseEntity.badRequest().body(badRequestResponse);
+            }
+            if(StringUtils.isNotBlank(id)){
                 UserData user = userService.findById(id);
                 APIResponse<UserData> userAPIResponse = new APIResponse<>(HttpStatus.OK, user);
                 return ResponseEntity.ok(userAPIResponse);
             }
-            if(StringUtils.isBlank(username)){
+            if(StringUtils.isNotBlank(username)){
                 UserData user = userService.findByUsername(username);
                 APIResponse<UserData> userAPIResponse = new APIResponse<>(HttpStatus.OK, user);
                 return ResponseEntity.ok(userAPIResponse);
