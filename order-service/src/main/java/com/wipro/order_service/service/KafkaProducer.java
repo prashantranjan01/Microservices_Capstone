@@ -13,7 +13,6 @@ public class KafkaProducer {
     }
 
     public void sendOrderEvent(OrderEvent event) {
-        kafkaTemplate.send("order-events", event);
+        kafkaTemplate.send("order-events",event);
     }
-
 }

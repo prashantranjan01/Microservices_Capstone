@@ -1,4 +1,4 @@
-package com.wipro.order_service.dto;
+package com.wipro.product_service.dto;
 
 public class OrderItemEvent {
     private String productId;

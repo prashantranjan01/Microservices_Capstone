@@ -1,6 +1,4 @@
-package com.wipro.order_service.dto;
-
-import com.wipro.order_service.entity.OrderStatus;
+package com.wipro.product_service.dto;
 
 import java.util.List;
 

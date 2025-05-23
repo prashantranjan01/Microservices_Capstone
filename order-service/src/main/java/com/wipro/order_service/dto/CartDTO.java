@@ -1,6 +1,7 @@
 package com.wipro.order_service.dto;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 public class CartDTO {
     private String id;
@@ -9,8 +10,17 @@ public class CartDTO {
     private LocalDateTime updatedAt;
     private String status;
     private double totalAmount;
+    private List<CartItemDTO> items;
 
     public CartDTO() {
+    }
+
+    public List<CartItemDTO> getItems() {
+        return items;
+    }
+
+    public void setItems(List<CartItemDTO> items) {
+        this.items = items;
     }
 
     public String getId() {

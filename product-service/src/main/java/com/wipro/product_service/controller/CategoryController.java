@@ -31,22 +31,31 @@ public class CategoryController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(apiResponse);
         }
     }
-    //TODO update and delete api
 
-//    @PutMapping("/category/{categoryId}")
-//    @PreAuthorize("hasRole('ADMIN')")
-//    public ResponseEntity<CategoryDto> updateCategory(@Valid @RequestBody CategoryDto categoryDto , @PathVariable Long categoryId){
-//        CategoryDto updateCategory = this.categoryService.updateCategory(categoryDto , categoryId);
-//        return new ResponseEntity<>(updateCategory , HttpStatus.OK);
-//    }
-//
-//    //delete - delete Category
-//    @DeleteMapping("/category/{categoryId}")
-//    @PreAuthorize("hasRole('ADMIN')")
-//    public ResponseEntity<ApiResponse> deleteCategory(@PathVariable Long categoryId){
-//        this.categoryService.deleteCategory(categoryId);
-//        return new ResponseEntity<ApiResponse>( new ApiResponse("Category Deleted Successfully" , true) , HttpStatus.OK);
-//    }
+    @DeleteMapping("/{id}")
+    public ResponseEntity<APIResponse<?>> deleteCategory(@PathVariable String id){
+        try {
+            categoryService.deleteCategory(id);
+            APIResponse<String> response=new APIResponse<>(HttpStatus.OK,"Category deleted successfully.");
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            APIResponse<?> apiResponse = new APIResponse<>(HttpStatus.NOT_FOUND, e.getMessage(), null);
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(apiResponse);
+        }
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<APIResponse<?>> updateCategory(@RequestBody Category category,
+                                                         @PathVariable String id){
+        try {
+            Category categoryDTO = categoryService.updateCategory(category, id);
+            APIResponse<Category> apiResponse = new APIResponse<>(HttpStatus.OK, categoryDTO);
+            return ResponseEntity.ok(apiResponse);
+        } catch (Exception e) {
+            APIResponse<?> apiResponse = new APIResponse<>(HttpStatus.NOT_FOUND, e.getMessage(), null);
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(apiResponse);
+        }
+    }
 
     @GetMapping("/retrieve/categories")
     public ResponseEntity<APIResponse<List<Category>>> getAllCategories() {

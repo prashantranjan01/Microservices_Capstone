@@ -1,9 +1,11 @@
 package com.wipro.order_service.dto;
 
-public class OrderItemEvent {
+public class OrderItemDTO {
     private String productId;
     private int quantity;
     private double pricePerUnit;
+    private String productName;
+    private String productImageUrl;
 
     public String getProductId() {
         return productId;
@@ -27,5 +29,21 @@ public class OrderItemEvent {
 
     public void setPricePerUnit(double pricePerUnit) {
         this.pricePerUnit = pricePerUnit;
+    }
+
+    public String getProductName() {
+        return productName;
+    }
+
+    public void setProductName(String productName) {
+        this.productName = productName;
+    }
+
+    public String getProductImageUrl() {
+        return productImageUrl;
+    }
+
+    public void setProductImageUrl(String productImageUrl) {
+        this.productImageUrl = productImageUrl;
     }
 }
