@@ -62,7 +62,7 @@ public class ProductController {
     }
 
 
-    @GetMapping("/search/products?search='sdsds'")
+//    @GetMapping("/search/products?search='sdsds'")
 
 
 //    @PutMapping("/{id}")
