@@ -13,6 +13,7 @@ export const authService = {
   logout: () => {
     localStorage.removeItem('token');
     localStorage.removeItem('user');
+    
   },
 
   saveSession: (token: string, user: User) => {

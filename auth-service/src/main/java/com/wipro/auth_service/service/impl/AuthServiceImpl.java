@@ -103,8 +103,36 @@ public class AuthServiceImpl implements AuthService {
         return new UserData(savedUser);
     }
 
+//    @Override
+//    public void changePassword(String username, String currentPassword, String UpdatedPassword) throws UserNotFoundException {
+//        User user = userRepo.findByUsername(username);
+//        if (user == null) {
+//            throw new UserNotFoundException("User with username : " + username + " not found.");
+//        }
+//
+//        String storedSalt = user.getSalt();
+//        String storedHash = user.getPassword();
+//
+//        String inputHash = BCrypt.hashpw(currentPassword, storedSalt);
+//        if (!inputHash.equals(storedHash)) {
+//            throw new InvalidPasswordException();
+//        }
+//        String newSalt=BCrypt.gensalt();
+//        String newHashedPassword=BCrypt.hashpw(UpdatedPassword,newSalt);
+//        user.setSalt(newSalt);
+//        user.setPassword(newHashedPassword);
+//        user.setUpdatedAt(LocalDateTime.now());
+//        userRepo.save(user);
+//    }
+
     @Override
-    public void changePassword(String username, String currentPassword, String UpdatedPassword) throws UserNotFoundException {
+    public void changePassword(String username, String currentPassword, String updatedPassword)
+            throws UserNotFoundException, InvalidPasswordException {
+
+        if (username == null || currentPassword == null || updatedPassword == null) {
+            throw new IllegalArgumentException("Username, current password, and new password must not be null.");
+        }
+
         User user = userRepo.findByUsername(username);
         if (user == null) {
             throw new UserNotFoundException("User with username : " + username + " not found.");
@@ -113,17 +141,25 @@ public class AuthServiceImpl implements AuthService {
         String storedSalt = user.getSalt();
         String storedHash = user.getPassword();
 
-        String inputHash = BCrypt.hashpw(currentPassword, storedSalt);
-        if (!inputHash.equals(storedHash)) {
-            throw new InvalidPasswordException();
+        if (storedSalt == null || storedHash == null) {
+            throw new IllegalStateException("Stored password or salt is missing for the user.");
         }
-        String newSalt=BCrypt.gensalt();
-        String newHashedPassword=BCrypt.hashpw(UpdatedPassword,newSalt);
+
+        String inputHash = BCrypt.hashpw(currentPassword, storedSalt);
+
+        if (!inputHash.equals(storedHash)) {
+            throw new InvalidPasswordException("Current password is incorrect.");
+        }
+
+        String newSalt = BCrypt.gensalt();
+        String newHashedPassword = BCrypt.hashpw(updatedPassword, newSalt);
+
         user.setSalt(newSalt);
         user.setPassword(newHashedPassword);
         user.setUpdatedAt(LocalDateTime.now());
         userRepo.save(user);
     }
+
 
     @Override
     public void deleteByUserName(String username) throws UserNotFoundException {
