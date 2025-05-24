@@ -1,5 +1,6 @@
 import { Navigate, Outlet } from 'react-router';
 import { useAuth } from '../context/AuthContext';
+import NavRoute from './NavRoute';
 
 interface RoleRouteProps {
   allowedRoles: number[];
@@ -14,7 +15,11 @@ const RoleRoute = ({ allowedRoles, redirectPath = '/' }: RoleRouteProps) => {
   }
 
   if (user && allowedRoles.includes(user.roleId)) {
-    return <Outlet />;
+    return (
+    
+        <Outlet />
+      
+    );
   }
 
   return <Navigate to={user?.roleId === 1 ? '/admin' : '/'} replace />;
