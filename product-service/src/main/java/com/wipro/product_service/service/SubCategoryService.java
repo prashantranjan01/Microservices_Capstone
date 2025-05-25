@@ -11,4 +11,8 @@ import java.util.List;
 public interface SubCategoryService {
     SubCategory createSubCategory(SubCategory subCategory, String categoryId, HttpServletRequest request) throws ResourceNotFoundException, PermissionDeniedException;
     List<SubCategory> getAllSubCategoriesByCategoryId(String categoryId)throws ResourceNotFoundException;
+    SubCategory updateSubCategory(SubCategory subCategory, HttpServletRequest request) throws ResourceNotFoundException, PermissionDeniedException;
+    void deleteSubCategory(String subCategoryId, HttpServletRequest request) throws ResourceNotFoundException, PermissionDeniedException;
+    SubCategory getSubCategoryById(String subCategoryId) throws ResourceNotFoundException;
+    List<SubCategory> getAllSubCategories();
 }

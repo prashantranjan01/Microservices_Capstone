@@ -1,6 +1,7 @@
 package com.wipro.product_service.controller;
 
 import com.wipro.product_service.dto.APIResponse;
+import com.wipro.product_service.model.Category;
 import com.wipro.product_service.model.Product;
 import com.wipro.product_service.model.ProductStatus;
 import com.wipro.product_service.service.ProductService;
@@ -87,33 +88,31 @@ public class ProductController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(apiResponse);
         }
     }
-
-
-//    @GetMapping("/search/products?search='sdsds'")
-
-
-//    @PutMapping("/{id}")
-//    public ResponseEntity<ProductResponse> updateProduct(
-//            @PathVariable Long id,
-//            @RequestBody ProductRequest request,
-//            HttpServletRequest servletRequest) {
-//        return ResponseEntity.ok(productService.updateProduct(id, request, servletRequest));
-//    }
-//
-//    @PatchMapping("/{id}/stock")
-//    public ResponseEntity<Void> updateStock(
-//            @PathVariable Long id,
-//            @RequestParam int quantity,
-//            HttpServletRequest servletRequest) {
-//        productService.updateProductStock(id, quantity, servletRequest);
-//        return ResponseEntity.ok().build();
-//    }
-//
-//    @DeleteMapping("/{id}")
-//    public ResponseEntity<Void> deleteProduct(
-//            @PathVariable Long id,
-//            HttpServletRequest servletRequest) {
-//        productService.deleteProduct(id, servletRequest);
-//        return ResponseEntity.noContent().build();
-//    }
+    @PutMapping("/{id}")
+    public ResponseEntity<APIResponse<?>> updateProduct(
+            @RequestBody Product product,
+            @PathVariable String id,
+            HttpServletRequest request) {
+        try {
+            Product productDTO = productService.updateProduct(product, id , request);
+            APIResponse<Product> apiResponse = new APIResponse<>(HttpStatus.OK, productDTO);
+            return ResponseEntity.ok(apiResponse);
+        } catch (Exception e) {
+            APIResponse<?> apiResponse = new APIResponse<>(HttpStatus.NOT_FOUND, e.getMessage(), null);
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(apiResponse);
+        }
+    }
+    @DeleteMapping("/{id}")
+    public ResponseEntity<APIResponse<?>> deleteProduct(
+            @PathVariable String id,
+            HttpServletRequest request) {
+        try {
+            productService.deleteProduct(id , request);
+            APIResponse<String> response=new APIResponse<>(HttpStatus.OK,"Product deleted successfully.");
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            APIResponse<?> apiResponse = new APIResponse<>(HttpStatus.NOT_FOUND, e.getMessage(), null);
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(apiResponse);
+        }
+    }
 }

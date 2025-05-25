@@ -12,17 +12,15 @@ import {
 } from '@mui/material';
 import { useNavigate, useParams } from 'react-router';
 import type { SubCategory } from '../../../types/SubCategory';
-import { categoryService } from '../../../services/categoryService';
-import { subCategoryService } from '../../../services/subCategoryService';
+import { categoryService } from '../../../services/categoryServices';
+import { subCategoryService } from '../../../services/subCategoryServices';
 
 const SubCategoryForm: React.FC = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
-  const [subCategory, setSubCategory] = useState<Partial<SubCategory>>({
-    title: '',
-    categoryId: ''
-  });
+  const [categoryId , setCategoryId] = useState("");
+  const [subCategory, setSubCategory] = useState<any>();
   const [categories, setCategories] = useState<any[]>([]);
   const [error, setError] = useState('');
 
@@ -34,16 +32,13 @@ const SubCategoryForm: React.FC = () => {
           id ? subCategoryService.getSubCategoryById(id) : Promise.resolve(null)
         ]);
         
-        if (categoriesRes.status && categoriesRes.data) {
-          setCategories(categoriesRes.data);
+        if (categoriesRes) {
+          setCategories(categoriesRes);
         }
 
         if (id && subCategoryRes?.status && subCategoryRes.data) {
-          setSubCategory({
-            id: subCategoryRes.data.id,
-            title: subCategoryRes.data.title,
-            categoryId: subCategoryRes.data.category?.id || ''
-          });
+          setSubCategory(subCategoryRes.data);
+          setCategoryId(subCategoryRes.data.category?.id || '');
         }
       } catch (err) {
         setError('Failed to fetch data');
@@ -59,41 +54,19 @@ const SubCategoryForm: React.FC = () => {
     e.preventDefault();
     setError('');
     
-    if (!subCategory.categoryId) {
+    if (!categoryId) {
       setError('Please select a category');
       return;
     }
 
     try {
       if (id) {
-        // For update - structure matches your backend SubCategory entity
-        const updateData = {
-          id: id,
-          title: subCategory.title || '',
-          // Your backend expects the full SubCategory object with existing fields
-          createdAt: subCategory.createdAt,
-          updatedAt: new Date().toISOString(),
-          createdBy: subCategory.createdBy,
-          category: {
-            id: subCategory.categoryId
-          }
-        };
-        
-        const response = await subCategoryService.updateSubCategory(updateData);
+        const response = await subCategoryService.updateSubCategory(subCategory);
         if (!response.status) {
           throw new Error(response.info);
         }
       } else {
-        // For create - uses separate parameters as per your backend
-        const response = await subCategoryService.createSubCategory(
-          { 
-            title: subCategory.title || '',
-            category: {
-              id: subCategory.categoryId
-            }
-          },
-          subCategory.categoryId
-        );
+        const response = await subCategoryService.createSubCategory(subCategory , categoryId);
         if (!response.status) {
           throw new Error(response.info);
         }
@@ -105,17 +78,21 @@ const SubCategoryForm: React.FC = () => {
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setSubCategory({
-      ...subCategory,
-      [e.target.name]: e.target.value
-    });
+    if(subCategory){
+      setSubCategory({
+        ...subCategory,
+        [e.target.name]: e.target.value
+      });
+    }else{
+      setSubCategory({
+        [e.target.name]: e.target.value
+      });
+    }
+    
   };
 
   const handleCategoryChange = (e: any) => {
-    setSubCategory({
-      ...subCategory,
-      categoryId: e.target.value
-    });
+    setCategoryId(e.target.value);
   };
 
   if (loading) return <CircularProgress />;
@@ -136,7 +113,7 @@ const SubCategoryForm: React.FC = () => {
         <InputLabel>Category</InputLabel>
         <Select
           name="categoryId"
-          value={subCategory.categoryId || ''}
+          value={categoryId || ''}
           onChange={handleCategoryChange}
           label="Category"
         >
@@ -153,7 +130,7 @@ const SubCategoryForm: React.FC = () => {
         margin="normal"
         label="Title"
         name="title"
-        value={subCategory.title || ''}
+        value={subCategory?.title || ''}
         onChange={handleChange}
         required
       />

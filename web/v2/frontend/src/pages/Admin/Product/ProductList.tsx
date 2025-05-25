@@ -26,9 +26,9 @@ const ProductList: React.FC = () => {
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const res = await productService.getAllProducts();
-        if (res.data) {
-          setProducts(res.data);
+        const res = await productService.getProducts();
+        if (res) {
+          setProducts(res);
         }
       } catch (err) {
         setError('Failed to fetch products');

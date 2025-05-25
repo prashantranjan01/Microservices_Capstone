@@ -46,12 +46,10 @@ public class Product {
 
     @ManyToOne
     @JoinColumn(name = "sub_category_id")
-    @JsonIgnore
     private SubCategory subCategory;
 
     @ManyToOne
     @JoinColumn(name = "category_id")
-    @JsonIgnore
     private Category category;
 
     public SubCategory getSubCategory() {

@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { TextField, Button, Box, Typography, CircularProgress } from '@mui/material';
 import { useNavigate, useParams } from 'react-router';
-import { categoryService } from '../../../services/categoryService';
 import type { Category } from '../../../types/Category';
+import { categoryService } from '../../../services/categoryServices';
 
 const CategoryForm: React.FC = () => {
   const { id } = useParams();

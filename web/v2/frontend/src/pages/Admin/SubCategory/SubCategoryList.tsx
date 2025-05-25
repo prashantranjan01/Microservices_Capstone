@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { Button, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, IconButton } from '@mui/material';
 import { Edit, Delete } from '@mui/icons-material';
-import { subCategoryService } from '../../../services/subCategoryService';
 import { useNavigate } from 'react-router';
 import type { SubCategory } from '../../../types/SubCategory';
+import { subCategoryService } from '../../../services/subCategoryServices';
 
 const SubCategoryList: React.FC = () => {
+
   const [subCategories, setSubCategories] = useState<SubCategory[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');

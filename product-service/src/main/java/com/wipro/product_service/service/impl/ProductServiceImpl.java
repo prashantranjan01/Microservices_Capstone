@@ -18,6 +18,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -88,5 +89,41 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public List<Product> getProductsByQuery(String q) {
         return this.productRepository.findByNameContainingOrDescriptionContaining(q,q);
+    }
+
+    @Override
+    public Product updateProduct(Product product, String id, HttpServletRequest servletRequest) {
+
+        Optional<Product> optionalProduct = productRepository.findById(id);
+        if(optionalProduct.isEmpty()){
+            throw new ResourceServiceException("Category with id: "+id+" not found");
+        }
+        Product existingProduct = optionalProduct.get();
+        if (product.getImageUrl() != null) {
+            existingProduct.setImageUrl(product.getImageUrl());
+        }
+        if(product.getName()!=null){
+            existingProduct.setName(product.getName());
+        }
+        if(product.getDescription()!=null){
+            existingProduct.setDescription(product.getDescription());
+        }
+        if(product.getStatus()!=null){
+            existingProduct.setStatus(product.getStatus());
+        }
+        existingProduct.setPrice(product.getPrice());
+        existingProduct.setStockQuantity(product.getStockQuantity());
+
+        existingProduct.setUpdatedAt(LocalDateTime.now());
+        return productRepository.save(existingProduct);
+    }
+
+    @Override
+    public void deleteProduct(String id, HttpServletRequest servletRequest) {
+        Optional<Product> optionalProduct = productRepository.findById(id);
+        if(optionalProduct.isEmpty()){
+            throw new ResourceServiceException("Product with id: "+id+" not found");
+        }
+        this.productRepository.delete(optionalProduct.get());
     }
 }

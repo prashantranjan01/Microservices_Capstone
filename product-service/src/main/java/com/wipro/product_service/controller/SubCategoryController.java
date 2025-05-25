@@ -1,6 +1,8 @@
 package com.wipro.product_service.controller;
 
 import com.wipro.product_service.dto.APIResponse;
+import com.wipro.product_service.exception.PermissionDeniedException;
+import com.wipro.product_service.exception.ResourceNotFoundException;
 import com.wipro.product_service.model.SubCategory;
 import com.wipro.product_service.service.SubCategoryService;
 import jakarta.servlet.http.HttpServletRequest;
@@ -44,6 +46,73 @@ public class SubCategoryController {
         } catch (Exception e) {
             APIResponse<?> apiResponse = new APIResponse<>(HttpStatus.NOT_FOUND, e.getMessage(), null);
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(apiResponse);
+        }
+    }
+
+    @PutMapping
+    public ResponseEntity<APIResponse<?>> updateSubCategory(
+            @RequestBody SubCategory subCategory,
+            HttpServletRequest request) {
+        try {
+            SubCategory updatedSubCategory = this.subCategoryService.updateSubCategory(subCategory, request);
+            APIResponse<SubCategory> apiResponse = new APIResponse<>(HttpStatus.OK, "Subcategory updated successfully.", updatedSubCategory);
+            return ResponseEntity.ok(apiResponse);
+        } catch (ResourceNotFoundException e) {
+            APIResponse<?> apiResponse = new APIResponse<>(HttpStatus.NOT_FOUND, e.getMessage(), null);
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(apiResponse);
+        } catch (PermissionDeniedException e) {
+            APIResponse<?> apiResponse = new APIResponse<>(HttpStatus.FORBIDDEN, e.getMessage(), null);
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(apiResponse);
+        } catch (Exception e) {
+            APIResponse<?> apiResponse = new APIResponse<>(HttpStatus.BAD_REQUEST, e.getMessage(), null);
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(apiResponse);
+        }
+    }
+
+    @DeleteMapping("/{subCategoryId}")
+    public ResponseEntity<APIResponse<?>> deleteSubCategory(
+            @PathVariable String subCategoryId,
+            HttpServletRequest request) {
+        try {
+            this.subCategoryService.deleteSubCategory(subCategoryId, request);
+            APIResponse<?> apiResponse = new APIResponse<>(HttpStatus.OK, "Subcategory deleted successfully.", null);
+            return ResponseEntity.ok(apiResponse);
+        } catch (ResourceNotFoundException e) {
+            APIResponse<?> apiResponse = new APIResponse<>(HttpStatus.NOT_FOUND, e.getMessage(), null);
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(apiResponse);
+        } catch (PermissionDeniedException e) {
+            APIResponse<?> apiResponse = new APIResponse<>(HttpStatus.FORBIDDEN, e.getMessage(), null);
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(apiResponse);
+        } catch (Exception e) {
+            APIResponse<?> apiResponse = new APIResponse<>(HttpStatus.BAD_REQUEST, e.getMessage(), null);
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(apiResponse);
+        }
+    }
+
+    @GetMapping("/{subCategoryId}")
+    public ResponseEntity<APIResponse<?>> getSubCategoryById(@PathVariable String subCategoryId) {
+        try {
+            SubCategory subCategory = this.subCategoryService.getSubCategoryById(subCategoryId);
+            APIResponse<SubCategory> apiResponse = new APIResponse<>(HttpStatus.OK, "Subcategory retrieved successfully.", subCategory);
+            return ResponseEntity.ok(apiResponse);
+        } catch (ResourceNotFoundException e) {
+            APIResponse<?> apiResponse = new APIResponse<>(HttpStatus.NOT_FOUND, e.getMessage(), null);
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(apiResponse);
+        } catch (Exception e) {
+            APIResponse<?> apiResponse = new APIResponse<>(HttpStatus.BAD_REQUEST, e.getMessage(), null);
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(apiResponse);
+        }
+    }
+
+    @GetMapping
+    public ResponseEntity<APIResponse<?>> getAllSubCategories() {
+        try {
+            List<SubCategory> subCategories = this.subCategoryService.getAllSubCategories();
+            APIResponse<List<SubCategory>> apiResponse = new APIResponse<>(HttpStatus.OK, "All subcategories retrieved successfully.", subCategories);
+            return ResponseEntity.ok(apiResponse);
+        } catch (Exception e) {
+            APIResponse<?> apiResponse = new APIResponse<>(HttpStatus.BAD_REQUEST, e.getMessage(), null);
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(apiResponse);
         }
     }
 }
