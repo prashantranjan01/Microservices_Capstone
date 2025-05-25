@@ -89,7 +89,7 @@ const ProductList: React.FC = () => {
             {products.map((product) => (
               <TableRow key={product.id}>
                 <TableCell>{product.name}</TableCell>
-                <TableCell>${product.price.toFixed(2)}</TableCell>
+                <TableCell>₹{product.price}</TableCell>
                 <TableCell>{product.stockQuantity}</TableCell>
                 <TableCell>
                   <Chip 

@@ -1,5 +1,6 @@
-import type { Category } from "./Category";
-import type { Product } from "./Product";
+// src/types/SubCategory.ts
+import { Category } from './Category';
+import { Product } from './Product';
 
 export interface SubCategory {
   id: string;
