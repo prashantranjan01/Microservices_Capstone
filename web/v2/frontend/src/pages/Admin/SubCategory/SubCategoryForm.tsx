@@ -1,37 +1,49 @@
-// src/pages/Admin/SubCategory/SubCategoryForm.tsx
 import React, { useState, useEffect } from 'react';
-import { TextField, Button, Box, Typography, CircularProgress, MenuItem, Select, InputLabel, FormControl } from '@mui/material';
+import { 
+  TextField, 
+  Button, 
+  Box, 
+  Typography, 
+  CircularProgress, 
+  MenuItem, 
+  Select, 
+  InputLabel, 
+  FormControl 
+} from '@mui/material';
 import { useNavigate, useParams } from 'react-router';
 import type { SubCategory } from '../../../types/SubCategory';
-import type { Category } from '../../../types/Category';
 import { categoryService } from '../../../services/categoryService';
 import { subCategoryService } from '../../../services/subCategoryService';
-
 
 const SubCategoryForm: React.FC = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
-  const [subCategory, setSubCategory] = useState<Partial<SubCategory>>({});
-  const [categories, setCategories] = useState<Category[]>([]);
+  const [subCategory, setSubCategory] = useState<Partial<SubCategory>>({
+    title: '',
+    categoryId: ''
+  });
+  const [categories, setCategories] = useState<any[]>([]);
   const [error, setError] = useState('');
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const [categoriesRes] = await Promise.all([
-          categoryService.getAllCategories()
+        const [categoriesRes, subCategoryRes] = await Promise.all([
+          categoryService.getAllCategories(),
+          id ? subCategoryService.getSubCategoryById(id) : Promise.resolve(null)
         ]);
         
-        if (categoriesRes.data) {
+        if (categoriesRes.status && categoriesRes.data) {
           setCategories(categoriesRes.data);
         }
 
-        if (id) {
-          const subCategoryRes = await subCategoryService.getSubCategoryById(id);
-          if (subCategoryRes.data) {
-            setSubCategory(subCategoryRes.data);
-          }
+        if (id && subCategoryRes?.status && subCategoryRes.data) {
+          setSubCategory({
+            id: subCategoryRes.data.id,
+            title: subCategoryRes.data.title,
+            categoryId: subCategoryRes.data.category?.id || ''
+          });
         }
       } catch (err) {
         setError('Failed to fetch data');
@@ -54,16 +66,41 @@ const SubCategoryForm: React.FC = () => {
 
     try {
       if (id) {
-        await subCategoryService.updateSubCategory(subCategory as SubCategory);
+        // For update - structure matches your backend SubCategory entity
+        const updateData = {
+          id: id,
+          title: subCategory.title || '',
+          // Your backend expects the full SubCategory object with existing fields
+          createdAt: subCategory.createdAt,
+          updatedAt: new Date().toISOString(),
+          createdBy: subCategory.createdBy,
+          category: {
+            id: subCategory.categoryId
+          }
+        };
+        
+        const response = await subCategoryService.updateSubCategory(updateData);
+        if (!response.status) {
+          throw new Error(response.info);
+        }
       } else {
-        await subCategoryService.createSubCategory(
-          subCategory as SubCategory, 
+        // For create - uses separate parameters as per your backend
+        const response = await subCategoryService.createSubCategory(
+          { 
+            title: subCategory.title || '',
+            category: {
+              id: subCategory.categoryId
+            }
+          },
           subCategory.categoryId
         );
+        if (!response.status) {
+          throw new Error(response.info);
+        }
       }
       navigate('/admin/subcategories');
-    } catch (err) {
-      setError(id ? 'Failed to update subcategory' : 'Failed to create subcategory');
+    } catch (err: any) {
+      setError(err.message || (id ? 'Failed to update subcategory' : 'Failed to create subcategory'));
     }
   };
 

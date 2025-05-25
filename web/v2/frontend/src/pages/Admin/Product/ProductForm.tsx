@@ -47,7 +47,7 @@ const ProductForm: React.FC = () => {
           const productRes = await productService.getProductById(id);
           if (productRes.data) {
             setProduct(productRes.data);
-            // Fetch subcategories for the product's category
+           
             if (productRes.data.categoryId) {
               const subCategoriesRes = await subCategoryService.getSubCategoriesByCategory(productRes.data.categoryId);
               if (subCategoriesRes.data) {
@@ -113,10 +113,10 @@ const ProductForm: React.FC = () => {
     setProduct({
       ...product,
       categoryId,
-      subCategoryId: undefined // Reset subcategory when category changes
+      subCategoryId: undefined 
     });
 
-    // Fetch subcategories for the selected category
+    
     try {
       const res = await subCategoryService.getSubCategoriesByCategory(categoryId);
       if (res.data) {

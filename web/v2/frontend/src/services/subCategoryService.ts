@@ -7,15 +7,23 @@ const API_BASE_URL = 'http://localhost:8080/api/sub-category';
 
 const getAuthHeaders = () => {
   const token = authService.getToken();
-  return token ? { headers: { Authorization: `Bearer ${token}` } } : {};
+  return token ? { 
+    headers: { 
+      Authorization: `Bearer ${token}`,
+      'Content-Type': 'application/json'
+    } 
+  } : {};
 };
 
 export const subCategoryService = {
-  createSubCategory: async (subCategory: SubCategory, categoryId: string): Promise<APIResponse<SubCategory>> => {
+  createSubCategory: async (subCategory: Omit<SubCategory, 'id' | 'createdAt' | 'updatedAt' | 'createdBy'>, categoryId: string): Promise<APIResponse<SubCategory>> => {
     try {
       const res = await axios.post<APIResponse<SubCategory>>(
         `${API_BASE_URL}/category/${categoryId}`,
-        subCategory,
+        {
+          title: subCategory.title,
+          category: { id: categoryId }
+        },
         getAuthHeaders()
       );
       return res.data;
@@ -29,11 +37,15 @@ export const subCategoryService = {
     }
   },
 
-  updateSubCategory: async (subCategory: SubCategory): Promise<APIResponse<SubCategory>> => {
+  updateSubCategory: async (subCategory: { id: string; title: string; category: { id: string } }): Promise<APIResponse<SubCategory>> => {
     try {
       const res = await axios.put<APIResponse<SubCategory>>(
         API_BASE_URL,
-        subCategory,
+        {
+          id: subCategory.id,
+          title: subCategory.title,
+          category: subCategory.category
+        },
         getAuthHeaders()
       );
       return res.data;
