@@ -1,5 +1,3 @@
-// components/user/ChangePassword.tsx
-
 import React, { useState } from 'react';
 import {
   Box,
@@ -10,18 +8,20 @@ import {
 } from '@mui/material';
 
 import { userService } from '../../../services/userService';
-import { useNavigate } from 'react-router';
 
 const ChangePassword: React.FC = () => {
   const [currentPassword, setCurrentPassword] = useState('');
   const [newPassword, setNewPassword] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
-  const navigate = useNavigate();
+  const [successMessage, setSuccessMessage] = useState('');
 
   const username = JSON.parse(localStorage.getItem('user') || '{}')?.username;
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+
+    setErrorMessage('');
+    setSuccessMessage('');
 
     if (!username || !currentPassword || !newPassword) {
       setErrorMessage('All fields are required');
@@ -32,12 +32,9 @@ const ChangePassword: React.FC = () => {
       const res = await userService.changePassword(username, currentPassword, newPassword);
 
       if (res.status) {
-        // Clear user session
-        localStorage.removeItem('token');
-        localStorage.removeItem('user');
-
-        // Redirect to login
-        navigate('/login', { replace: true });
+        setSuccessMessage('Password changed successfully!');
+        setCurrentPassword('');
+        setNewPassword('');
       } else {
         setErrorMessage(res.info || 'Password change failed.');
       }
@@ -89,6 +86,7 @@ const ChangePassword: React.FC = () => {
         Change Password
       </Button>
 
+      {successMessage && <Alert severity="success">{successMessage}</Alert>}
       {errorMessage && <Alert severity="error">{errorMessage}</Alert>}
     </Box>
   );
