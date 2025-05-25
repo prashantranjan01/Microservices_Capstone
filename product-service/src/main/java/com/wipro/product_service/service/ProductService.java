@@ -18,9 +18,6 @@ public interface ProductService {
     List<Product> getAllProductsByStatus(ProductStatus status);
     List<Product> getProductsByCategoryIdAndSubCategoryId(String categoryId , String subCategoryId);
     List<Product> getProductsByQuery(String q);
-
-//
-//    Product updateProduct(Long id, ProductRequest request, HttpServletRequest servletRequest);
-//    Product updateProductStock(Long productId, int quantity, HttpServletRequest servletRequest);
-//    String deleteProduct(Long id, HttpServletRequest servletRequest);
+    Product updateProduct(Product product,String id,  HttpServletRequest servletRequest);
+    void deleteProduct(String id, HttpServletRequest servletRequest);
 }

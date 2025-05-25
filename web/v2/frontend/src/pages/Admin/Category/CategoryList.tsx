@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { Button, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, IconButton } from '@mui/material';
 import { Edit, Delete } from '@mui/icons-material';
-import { categoryService } from '../../../services/categoryService';
 import { useNavigate } from 'react-router';
 import type { Category } from '../../../types/Category';
+import { categoryService } from '../../../services/categoryServices';
 
 const CategoryList: React.FC = () => {
   const [categories, setCategories] = useState<Category[]>([]);
@@ -15,8 +15,8 @@ const CategoryList: React.FC = () => {
     const fetchCategories = async () => {
       try {
         const res = await categoryService.getAllCategories();
-        if (res.data) {
-          setCategories(res.data);
+        if (res) {
+          setCategories(res);
         }
       } catch (err) {
         setError('Failed to fetch categories');

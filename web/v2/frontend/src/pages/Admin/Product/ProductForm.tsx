@@ -13,10 +13,10 @@ import {
   FormHelperText
 } from '@mui/material';
 import { useNavigate, useParams } from 'react-router';
-import { ProductStatus, type Product } from '../../../types/Product';
-import { categoryService } from '../../../services/categoryService';
+import { categoryService } from '../../../services/categoryServices';
 import { productService } from '../../../services/productServices';
-import { subCategoryService } from '../../../services/subCategoryService';
+import { ProductStatus, type Product } from '../../../types/Product';
+import { subCategoryService } from '../../../services/subCategoryServices';
 
 
 const ProductForm: React.FC = () => {
@@ -29,7 +29,9 @@ const ProductForm: React.FC = () => {
     price: 0
   });
   const [categories, setCategories] = useState<any[]>([]);
+  const [categoryId , setCategoryId] = useState("");
   const [subCategories, setSubCategories] = useState<any[]>([]);
+  const [subCategoryId , setSubCategoryId] = useState("");
   const [error, setError] = useState('');
 
   useEffect(() => {
@@ -39,19 +41,21 @@ const ProductForm: React.FC = () => {
           categoryService.getAllCategories()
         ]);
         
-        if (categoriesRes.data) {
-          setCategories(categoriesRes.data);
+        if (categoriesRes) {
+          setCategories(categoriesRes);
         }
 
         if (id) {
           const productRes = await productService.getProductById(id);
-          if (productRes.data) {
-            setProduct(productRes.data);
+          if (productRes) {
+            setProduct(productRes);
+            setCategoryId(productRes.category?.id || '');
+            setSubCategoryId(productRes.subCategory?.id || '');
            
-            if (productRes.data.categoryId) {
-              const subCategoriesRes = await subCategoryService.getSubCategoriesByCategory(productRes.data.categoryId);
-              if (subCategoriesRes.data) {
-                setSubCategories(subCategoriesRes.data);
+            if (productRes?.category?.id) {
+              const subCategoriesRes = await subCategoryService.getAllSubCategoriesByCategoryId(productRes.category.id);
+              if (subCategoriesRes) {
+                setSubCategories(subCategoriesRes);
               }
             }
           }
@@ -70,7 +74,7 @@ const ProductForm: React.FC = () => {
     e.preventDefault();
     setError('');
     
-    if (!product.categoryId || !product.subCategoryId) {
+    if (!categoryId || !subCategoryId) {
       setError('Please select both category and subcategory');
       return;
     }
@@ -81,8 +85,8 @@ const ProductForm: React.FC = () => {
       } else {
         await productService.createProduct(
           product as Product, 
-          product.categoryId,
-          product.subCategoryId
+          categoryId,
+          subCategoryId
         );
       }
       navigate('/admin/products');
@@ -108,19 +112,14 @@ const ProductForm: React.FC = () => {
     });
   };
 
-  const handleCategoryChange = async (e: any) => {
-    const categoryId = e.target.value;
-    setProduct({
-      ...product,
-      categoryId,
-      subCategoryId: undefined 
-    });
 
+  const handleCategoryChange = async (e: any) => {
+    setCategoryId(e.target.value);
     
     try {
-      const res = await subCategoryService.getSubCategoriesByCategory(categoryId);
-      if (res.data) {
-        setSubCategories(res.data);
+      const res = await subCategoryService.getAllSubCategoriesByCategoryId(e.target.value);
+      if (res) {
+        setSubCategories(res);
       }
     } catch (err) {
       setError('Failed to fetch subcategories');
@@ -208,7 +207,7 @@ const ProductForm: React.FC = () => {
         <InputLabel>Category</InputLabel>
         <Select
           name="categoryId"
-          value={product.categoryId || ''}
+          value={categoryId || ''}
           onChange={handleCategoryChange}
           label="Category"
         >
@@ -224,14 +223,14 @@ const ProductForm: React.FC = () => {
         <InputLabel>SubCategory</InputLabel>
         <Select
           name="subCategoryId"
-          value={product.subCategoryId || ''}
-          onChange={(e) => setProduct({...product, subCategoryId: e.target.value})}
+          value={subCategoryId || ''}
+          onChange={(e) => setSubCategoryId(e.target.value)}
           label="SubCategory"
-          disabled={!product.categoryId || subCategories.length === 0}
+          disabled={!categoryId || subCategories.length === 0}
         >
           {subCategories.length === 0 && (
             <MenuItem disabled value="">
-              {product.categoryId ? 'No subcategories found' : 'Select a category first'}
+              {categoryId ? 'No subcategories found' : 'Select a category first'}
             </MenuItem>
           )}
           {subCategories.map((subCategory) => (
@@ -240,7 +239,7 @@ const ProductForm: React.FC = () => {
             </MenuItem>
           ))}
         </Select>
-        {!product.categoryId && (
+        {!categoryId && (
           <FormHelperText>Please select a category first</FormHelperText>
         )}
       </FormControl>

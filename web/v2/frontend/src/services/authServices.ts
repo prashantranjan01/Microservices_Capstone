@@ -1,13 +1,13 @@
-import axios from 'axios';
 import type { AuthResponse } from '../types/Auth/AuthResponse';
 import type { User } from '../types/User';
 import type { APIResponse } from '../types/APIResponse';
+import { axiosInstance } from '../utils/axiosInstance';
 
 const AUTH_API_URL = 'http://localhost:8080/api/auth'; 
 
 export const authService = {
   login: async (username: string, password: string): Promise<AuthResponse> => {
-    const res = await axios.post<APIResponse<AuthResponse>>(`${AUTH_API_URL}/login?username=${username}&password=${password}`);
+    const res = await axiosInstance.post<APIResponse<AuthResponse>>(`${AUTH_API_URL}/login?username=${username}&password=${password}`);
     return res.data.data;
   },
 
@@ -19,7 +19,7 @@ export const authService = {
       username,
       password,
     }
-    const res = await axios.post<APIResponse<AuthResponse>>(`${AUTH_API_URL}/register` , user);
+    const res = await axiosInstance.post<APIResponse<AuthResponse>>(`${AUTH_API_URL}/register` , user);
     return res.data.data;
   },
 

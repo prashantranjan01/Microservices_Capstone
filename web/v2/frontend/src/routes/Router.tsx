@@ -8,18 +8,15 @@ import Navbar from '../components/Navbar/Navbar'
 import SubCategoryPage from '../pages/SubCategory/SubCategoryPage'
 import ProductPage from '../pages/Product/ProductPage'
 import UpdateProfile from '../pages/Profile/Update/UpdateProfile'
-import ChangePassword from '../pages/ChangePassword/ChangePassword'
 import Login from '../pages/Auth/Login/Login'
 import Register from '../pages/Auth/Register/Register'
-import UserProfile from '../pages/Auth/User/UserProfile'
-import NavRoute from './NavRoute'
-import ChangePassword from '../pages/Auth/User/ChangePassword'
 import CategoryList from '../pages/Admin/Category/CategoryList'
 import CategoryForm from '../pages/Admin/Category/CategoryForm'
 import SubCategoryList from '../pages/Admin/SubCategory/SubCategoryList'
 import SubCategoryForm from '../pages/Admin/SubCategory/SubCategoryForm'
 import ProductList from '../pages/Admin/Product/ProductList'
 import ProductForm from '../pages/Admin/Product/ProductForm'
+import ChangePassword from '../pages/ChangePassword/ChangePassword'
 
 const Router = () => {
   return (
@@ -42,26 +39,20 @@ const Router = () => {
         <Route element={<RoleRoute allowedRoles={[1]} />}>
           <Route element={<Navbar isAdmin={true}/>}>
             <Route path="/admin" element={<AdminDashboard />} />
+            <Route path="/admin/categories" element={<CategoryList />} />
+            <Route path="/admin/categories/add" element={<CategoryForm />} />
+            <Route path="/admin/categories/edit/:id" element={<CategoryForm />} />
+            <Route path="/admin/subcategories" element={<SubCategoryList />} />
+            <Route path="/admin/subcategories/add" element={<SubCategoryForm />} />
+            <Route path="/admin/subcategories/edit/:id" element={<SubCategoryForm />} />
+            <Route path="/admin/products" element={<ProductList />} />
+            <Route path="/admin/products/add" element={<ProductForm />} />
+            <Route path="/admin/products/edit/:id" element={<ProductForm />} />
           </Route>
         </Route>
         <Route element={<RoleRoute allowedRoles={[0,1]} />}>
           <Route element={<Navbar isAdmin={true}/>}>
             <Route path="/update-profile" element={<UpdateProfile />} />
-             {/* Category Routes */}
-             <Route path="/admin/categories" element={<CategoryList />} />
-            <Route path="/admin/categories/add" element={<CategoryForm />} />
-            <Route path="/admin/categories/edit/:id" element={<CategoryForm />} />
-            
-            {/* SubCategory Routes */}
-            <Route path="/admin/subcategories" element={<SubCategoryList />} />
-            <Route path="/admin/subcategories/add" element={<SubCategoryForm />} />
-            <Route path="/admin/subcategories/edit/:id" element={<SubCategoryForm />} />
-            
-            {/* Product Routes */}
-            <Route path="/admin/products" element={<ProductList />} />
-            <Route path="/admin/products/add" element={<ProductForm />} />
-            <Route path="/admin/products/edit/:id" element={<ProductForm />} />
-            <Route path="/profile" element={<UserProfile />} />
             <Route path="/change-password" element={<ChangePassword />} />
           </Route>
         </Route>

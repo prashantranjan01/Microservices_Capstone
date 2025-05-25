@@ -1,11 +1,13 @@
 import type { Category } from "./Category";
 import type { SubCategory } from "./SubCategory";
 
-export enum ProductStatus {
-  ACTIVE = 'ACTIVE',
-  INACTIVE = 'INACTIVE',
-  OUT_OF_STOCK = 'OUT_OF_STOCK'
-}
+export const ProductStatus = {
+  ACTIVE: 'ACTIVE',
+  INACTIVE: 'INACTIVE',
+  OUT_OF_STOCK: 'OUT_OF_STOCK',
+} as const;
+
+export type ProductStatus = (typeof ProductStatus)[keyof typeof ProductStatus];
 
 export interface Product {
   id: string;
@@ -17,8 +19,6 @@ export interface Product {
   imageUrl?: string;
   category?: Category;
   subCategory?: SubCategory;
-  categoryId?: string;
-  subCategoryId?: string;
   createdAt?: string;
   updatedAt?: string;
   createdBy?: string;
