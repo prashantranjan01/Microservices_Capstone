@@ -21,6 +21,7 @@ public class SubCategory {
 
     @ManyToOne
     @JoinColumn(name = "category_id")
+    @JsonIgnore
     private Category category;
 
     @Column(name = "created_by")

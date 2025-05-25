@@ -17,6 +17,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -53,5 +54,11 @@ public class SubCategoryServiceImpl implements SubCategoryService {
         } catch (Exception e) {
             throw new ResourceServiceException("Failed to create sub category.");
         }
+    }
+
+    @Override
+    public List<SubCategory> getAllSubCategoriesByCategoryId(String categoryId) throws ResourceNotFoundException {
+        Category category = this.categoryRepository.findById(categoryId).orElseThrow(() -> new ResourceNotFoundException("Category not found with id :" + categoryId));;
+        return this.subCategoryRepository.findByCategory(category);
     }
 }

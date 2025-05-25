@@ -48,7 +48,7 @@ public class ProductServiceImpl implements ProductService {
         Category category = this.categoryRepository.findById(categoryId).orElseThrow(() -> new ResourceNotFoundException("Category not found with id :" + categoryId));;
         product.setCategory(category);
 
-        SubCategory subCategory = this.subCategoryRepository.findById(subCategoryId).orElseThrow(() -> new ResourceNotFoundException("Subcategory not found with id :" + subCategoryId));;
+        SubCategory subCategory = this.subCategoryRepository.findById(subCategoryId).orElseThrow(() -> new ResourceNotFoundException("SubCategory not found with id :" + subCategoryId));;
         product.setSubCategory(subCategory);
 
         product.setId(UUID.randomUUID().toString());
@@ -76,5 +76,17 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public List<Product> getAllProductsByStatus(ProductStatus status) {
         return productRepository.findByStatus(status);
+    }
+
+    @Override
+    public List<Product> getProductsByCategoryIdAndSubCategoryId(String categoryId, String subCategoryId) {
+        Category category = this.categoryRepository.findById(categoryId).orElseThrow(() -> new ResourceNotFoundException("Category not found with id :" + categoryId));;
+        SubCategory subCategory = this.subCategoryRepository.findById(subCategoryId).orElseThrow(() -> new ResourceNotFoundException("SubCategory not found with id :" + subCategoryId));;
+        return this.productRepository.findByCategoryAndSubCategory(category , subCategory);
+    }
+
+    @Override
+    public List<Product> getProductsByQuery(String q) {
+        return this.productRepository.findByNameContainingOrDescriptionContaining(q,q);
     }
 }

@@ -61,6 +61,33 @@ public class ProductController {
         }
     }
 
+    @GetMapping("/category/{categoryId}/sub-category/{subCategoryId}")
+    public ResponseEntity<APIResponse<?>> getProductsByCategoryIdAndSubCategoryId(
+            @PathVariable String categoryId,
+            @PathVariable String subCategoryId) {
+        try {
+            List<Product> productList = productService.getProductsByCategoryIdAndSubCategoryId(categoryId , subCategoryId);
+            APIResponse<List<Product>> apiResponse = new APIResponse<>(HttpStatus.OK,  productList);
+            return ResponseEntity.status(HttpStatus.OK).body(apiResponse);
+        } catch (Exception e) {
+            APIResponse<?> apiResponse = new APIResponse<>(HttpStatus.NOT_FOUND, e.getMessage(), null);
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(apiResponse);
+        }
+    }
+
+    @GetMapping("/s/products")
+    public ResponseEntity<APIResponse<?>> getProductsByQuery(
+            @RequestParam String q){
+        try {
+            List<Product> productList = productService.getProductsByQuery(q);
+            APIResponse<List<Product>> apiResponse = new APIResponse<>(HttpStatus.OK,  productList);
+            return ResponseEntity.status(HttpStatus.OK).body(apiResponse);
+        } catch (Exception e) {
+            APIResponse<?> apiResponse = new APIResponse<>(HttpStatus.NOT_FOUND, e.getMessage(), null);
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(apiResponse);
+        }
+    }
+
 
 //    @GetMapping("/search/products?search='sdsds'")
 

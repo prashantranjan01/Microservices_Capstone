@@ -22,6 +22,7 @@ public class UserData {
         this.email = user.getEmail();
         this.username = user.getUsername();
         this.roleId = user.getRoleId();
+        this.address = user.getAddress();
     }
 
     public String getAddress() {
