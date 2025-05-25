@@ -16,6 +16,8 @@ public interface ProductService {
     Product getProductById(String id) throws ProductNotFoundException;
     List<Product> getAllProducts();
     List<Product> getAllProductsByStatus(ProductStatus status);
+    List<Product> getProductsByCategoryIdAndSubCategoryId(String categoryId , String subCategoryId);
+    List<Product> getProductsByQuery(String q);
 
 //
 //    Product updateProduct(Long id, ProductRequest request, HttpServletRequest servletRequest);

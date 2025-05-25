@@ -89,26 +89,26 @@ public class OrderServiceImpl implements OrderService {
         order.setItems(orderItems);
         order = orderRepository.save(order);
 
-        sendOrderEvent(order);
+//        sendOrderEvent(order);
         return order;
     }
 
-    private void sendOrderEvent(Order order) {
-        OrderEvent event = new OrderEvent();
-        event.setOrderId(order.getId());
-        event.setUserId(order.getUserId());
-        event.setTotalAmount(order.getTotalAmount());
-
-        event.setItems(order.getItems().stream().map(item -> {
-            OrderItemEvent itemEvent = new OrderItemEvent();
-            itemEvent.setProductId(item.getProductId());
-            itemEvent.setQuantity(item.getQuantity());
-            itemEvent.setPricePerUnit(item.getPricePerUnit());
-            return itemEvent;
-        }).collect(Collectors.toList()));
-
-        kafkaProducer.sendOrderEvent(event);
-    }
+//    private void sendOrderEvent(Order order) {
+//        OrderEvent event = new OrderEvent();
+//        event.setOrderId(order.getId());
+//        event.setUserId(order.getUserId());
+//        event.setTotalAmount(order.getTotalAmount());
+//
+//        event.setItems(order.getItems().stream().map(item -> {
+//            OrderItemEvent itemEvent = new OrderItemEvent();
+//            itemEvent.setProductId(item.getProductId());
+//            itemEvent.setQuantity(item.getQuantity());
+//            itemEvent.setPricePerUnit(item.getPricePerUnit());
+//            return itemEvent;
+//        }).collect(Collectors.toList()));
+//
+//        kafkaProducer.sendOrderEvent(event);
+//    }
 
     @Override
     public List<Order> getOrdersByUserId(String userId) {

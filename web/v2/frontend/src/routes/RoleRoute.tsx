@@ -7,7 +7,7 @@ interface RoleRouteProps {
 }
 
 const RoleRoute = ({ allowedRoles, redirectPath = '/' }: RoleRouteProps) => {
-  const { isAuthenticated, user } = useAuth();
+  const { isAuthenticated, user  } = useAuth();
 
   if (!isAuthenticated) {
     return <Navigate to="/auth/login" replace />;

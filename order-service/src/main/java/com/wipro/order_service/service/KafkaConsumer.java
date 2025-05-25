@@ -8,17 +8,17 @@ import org.springframework.stereotype.Service;
 @Service
 public class KafkaConsumer {
 
-    @Autowired
-    OrderService orderService;
-
-    public KafkaConsumer(OrderService orderService) {
-        this.orderService = orderService;
-    }
-
-    @KafkaListener(
-            topics = "inventory-updates",
-            groupId = "order-service-group")
-    public void consumeInventoryUpdate(InventoryUpdate update) {
-        orderService.processInventoryUpdate(update);
-    }
+//    @Autowired
+//    OrderService orderService;
+//
+//    public KafkaConsumer(OrderService orderService) {
+//        this.orderService = orderService;
+//    }
+//
+//    @KafkaListener(
+//            topics = "inventory-updates",
+//            groupId = "order-service-group")
+//    public void consumeInventoryUpdate(InventoryUpdate update) {
+//        orderService.processInventoryUpdate(update);
+//    }
 }
