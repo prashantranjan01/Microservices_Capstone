@@ -1,5 +1,3 @@
-// components/user/ChangePassword.tsx
-
 import React, { useState } from 'react';
 import {
   Box,
@@ -85,6 +83,7 @@ const ChangePassword: React.FC = () => {
         Change Password
       </Button>
 
+      {successMessage && <Alert severity="success">{successMessage}</Alert>}
       {errorMessage && <Alert severity="error">{errorMessage}</Alert>}
     </Box>
   );
